@@ -1,0 +1,129 @@
+.container {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #BFC9CA;
+  font-family: var(--sl-font-sans);
+  font-size: 1rem;
+  color: #2E4053;
+  border-radius: 5px;
+}
+
+.header {
+    display:flex;
+    padding:5px;
+    justify-content: space-between;
+    align-items:center;
+    height:30px;
+    opacity: 0.8;
+}
+
+.checklist_Title {
+    font-size:1.5rem;
+    font-weight: bold; 
+}
+
+.checklist_Total {
+    font-size:1rem; 
+    color: red;
+}
+
+.footer {
+    display:flex;
+    padding:5px;
+    justify-content: flex-start;
+    align-items:flex-start;
+    height:60px;
+}
+
+
+
+.item_list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.item_list::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.item_list {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.item_container {
+  position: relative;
+  overflow: hidden;
+  height: 60px;
+  display: flex;  
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  border-radius: 10px;
+  background-color: #F1C40F;
+}
+
+.item_orderNumber {
+    display: flex;
+    justify-content: center;
+    align-items: centers;
+    width: 30px;
+    color: white;
+    font-weight: bold;
+    /* background-color: #2E4053;  */
+
+}
+
+.item_info {
+    padding: 5px;
+    display: flex;
+    height:100%;
+    flex-direction: column;
+    justify-content: space-evenly;
+    flex-grow: 17;
+    flex: 17;
+    background-color: #D5D8DC;
+}
+
+.item_deleteBtn {
+    display: flex;
+    justify-content: center;
+    align-items: centers;
+    width: 30px;
+    font-size: large;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    /* background-color: #2E4053;  */
+}
+
+.item_info span {
+    width:95%;
+    overflow-y: hidden;
+    height: 1.3rem;
+}
+
+.item_container_img {
+    flex-grow: 6;
+    flex: 6;
+    display: flex;
+    overflow: hidden;
+    height: 100%;
+    background-color: #D5D8DC;
+  }
+
+.item_container_img img {
+  width: 100%;
+  object-fit: cover;
+}
+
+.hidden {
+  display: none;
+}
