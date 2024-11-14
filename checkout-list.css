@@ -70,16 +70,23 @@
   background-color: #F1C40F;
 }
 
+.item_checked {
+  opacity: 1;
+  background-color: #4B5B6B;
+}
+
 .item_orderNumber {
     display: flex;
     justify-content: center;
     align-items: centers;
+    padding: 20px 0 20px 0;
     width: 30px;
     color: white;
     font-weight: bold;
-    /* background-color: #2E4053;  */
-
+    /* background-color: #2E4053;  */  
 }
+
+
 
 .item_info {
     padding: 5px;
@@ -107,9 +114,28 @@
 .item_info span {
     width:95%;
     font-size:1rem;
-    overflow-y: hidden;
-    height: 2.3rem;
-    line-height: 1rem;
+    max-height: 2.3rem;
+    line-height: 1.1rem;
+    opacity: 0.9;
+}
+
+.item_info_quantity_price {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5px;
+  color: rgba(75,91,107,0.5);
+  height: 1.3rem;
+  overflow-y: hidden;
+}
+
+.item_info_quantity_unitprice {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 5px;
 }
 
 .item_container_img {

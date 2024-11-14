@@ -7,6 +7,7 @@ class CheckoutList extends HTMLElement {
       //variables used to store properties of Components
       this.total = 0;
       this.selectedItems = [];
+      this.checkedItems = [];
       this.filteredItems = [];
       this.searchTerm = '';
       this.selectedCategory = '';
@@ -186,14 +187,20 @@ class CheckoutList extends HTMLElement {
         listItem.innerHTML = `
           <div class="item_container">
            <div class="item_orderNumber">
-              <span>${index+1}</span> 
+              <input type="checkbox">
             </div>          
             <div class="item_container_img">
               <img src="${item.url[0]}" alt="${item.name}">
             </div>
             <div class="item_info">                
               <span>  ${item.name} (${item.unit}) </span>
-              <quantity-selector value=${item.number}></quantity-selector>             
+              <div class="item_info_quantity_price">
+                <div class="item_info_quantity_unitprice">
+                  <quantity-selector value=${item.number}></quantity-selector>
+                  <div>x ${this.addkToNumber(item.price)} =</div>
+                </div>
+                <div>${this.addkToNumber(item.number*item.price)}</div>
+              </div>
             </div>
              <div class="item_deleteBtn">            
                 ⛔             
@@ -205,15 +212,56 @@ class CheckoutList extends HTMLElement {
          const item_container = listItem.querySelector('.item_container');
          const item_deleteBtn = listItem.querySelector('.item_deleteBtn');
          const quantity_selector = listItem.querySelector('quantity-selector');
+         const checkbox_area = listItem.querySelector('.item_orderNumber');
+         const checkbox = checkbox_area.querySelector('input[type="checkbox"]');
+        
+        if (this.isItemChecked(item.id)) {
+          item_container.classList.add('item_checked');
+          checkbox.checked = true;
+        }
 
+        checkbox.addEventListener('click',(e)=> {   
+          e.stopPropagation();
+          if (!checkbox.checked) { 
+
+            this.removeItemFromCheckedList(item.id);     
+          } 
+          else {
+            //checkbox.checked=true;
+            this.addItemToCheckedList(item.id);               
+          }         
+          this.updateList();
+          //checkbox_area.click();
+        });
+
+
+        checkbox_area.addEventListener('click',(e)=> {
+          e.stopPropagation();
+          if (checkbox.checked) { 
+            //checkbox.checked = false; 
+            this.removeItemFromCheckedList(item.id);     
+          } 
+          else {
+            //checkbox.checked=true;
+            this.addItemToCheckedList(item.id);               
+          }        
+          this.updateList();
+        })
+
+         //console.log(checkbox_area);
+         //console.log(checkbox);
         // ADD addEventListener FOR EACH div/button declared in this skeleton.
         
         item_deleteBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             
-            this.openConfirmation_clearOne().then((result)=> {
+            this.openConfirmation_clearOne(`Bạn có muốn xóa ${item.name}`).then((result)=> {
               if (result==true) {
-                  this.removeItemFromSelection(item.id);
+                  if (this.isItemChecked(item.id)) {
+                    for (let i=0;i<this.checkedItems.length;i++)
+                      this.removeItemFromSelection(this.checkedItems[i].id);
+                  }
+                  else { this.removeItemFromSelection(item.id); }
                   this.updateList();
                   this.fireChangeEvent(); 
               }
@@ -222,32 +270,21 @@ class CheckoutList extends HTMLElement {
         });
 
 
-
+        quantity_selector.addEventListener('valueChanged', (e) => {
+           // if nam chung danh sach
+           if (this.isItemChecked(item.id)) {
+            this.handleQuantityChangeGroup(item.id,e.detail.value);
+           } else { // neu nam rieng 1 minh
+            this.handleQuantityChangeOne(item.id,e.detail.value);
+           }
+             
+       });
 
         // quantity_selector.addEventListener('valueChanged', (e) => {
         //   this.updateItemQuantity(item.id,e.detail.value);          
         // });
     
-        quantity_selector.addEventListener('valueChanged', (e) => {
-          console.log(`quantity_selector change ${e.detail.value}`);
-          if (e.detail.value==0) {
-            console.log('vao 0');
-            this.openConfirmation_clearOne().then((result)=> {
-              console.log(result);
-              if (result==true) {
-                  this.removeItemFromSelection(item.id);
-                  this.updateList();
-                  this.fireChangeEvent(); 
-              }
-              if (result==false) {
-                quantity_selector.value = 1;  
-              }
-            });  
-
-          }
-          this.updateItemQuantity(item.id,e.detail.value);    
-          this.fireChangeEvent();      
-      });
+       
 
        
         // Update APPEARANCE of this Item based on data passed - this is necessary when giving new data to the whole list from outside world. This needs 2 variables the DOM element and the position in the new data
@@ -259,12 +296,12 @@ class CheckoutList extends HTMLElement {
       });
     }
 
-  async openConfirmation_clearOne() {
+  async openConfirmation_clearOne(value) {
       const dialog = this.shadowRoot.querySelector('dialog-component');    
       const userConfirmed = await dialog.show(
           {
               label : "Xác nhận", 
-              message : `<sl-icon name="exclamation-triangle"></sl-icon><span>Bạn có muốn xóa?</span>`,
+              message : `<sl-icon name="exclamation-triangle"></sl-icon><span>${value}</span>`,
               okbtn : "Đồng ý",
               cancelbtn : "Không", 
               closeOnOverlay : true
@@ -287,10 +324,123 @@ class CheckoutList extends HTMLElement {
     return userConfirmed;
 }
 
+    async openConfirmation_Group() {
+      const dialog = this.shadowRoot.querySelector('dialog-component');    
+      const userConfirmed = await dialog.show(
+          {
+              label : "Xác nhận", 
+              message : `<sl-icon name="exclamation-triangle"></sl-icon><span>Chọn cùng số lượng cho ${this.checkedItems.length} loại?</span>`,
+              okbtn : "Đồng ý",
+              cancelbtn : "Không", 
+              closeOnOverlay : true
+          });                          
+      //console.log(userConfirmed);     
+      return userConfirmed;
+    }
+
 
   // dialog.addEventListener('resovleEvent', (event) => {
   //     console.log(event.detail.result);
   // })
+
+    handleQuantityChangeGroup(itemId,value) {
+      this.openConfirmation_Group().then((result)=> {
+        console.log(result);
+          if (result==true) {
+                if (value==0) { // neu bang 0
+                  console.log('=0');
+                  //console.log('vao 0');
+                  this.openConfirmation_clearOne(`Bạn có muốn xóa ${this.checkedItems.length} loại?`).then((result)=> {
+                    console.log(result);
+                    if (result==true) {
+                        if (this.isItemChecked(itemId)) {
+                          console.log('vao day');
+                          for (let i=0;i<this.checkedItems.length;i++) {   
+                            this.removeItemFromSelection(this.checkedItems[i].id);
+                          }
+                          this.checkedItems = [];                   
+                        }
+                        else { this.removeItemFromSelection(itemId); }
+                        this.updateList();
+                        this.fireChangeEvent(); 
+                    } else {        
+                      console.log(`vao false update 1 thoi`);         
+                      this.updateNumberofItem(itemId,1);   
+                      this.updateList();
+                      this.fireChangeEvent(); 
+                    }
+                  });  
+      
+                } else { // neu > 0
+                  console.log('>0');
+                  console.log(value);
+                  for (let i=0;i<this.checkedItems.length;i++) {
+                    this.updateNumberofItem(this.checkedItems[i].id,value);         
+                  }
+                  this.updateList();
+                  this.fireChangeEvent();    
+                }
+            } else {
+              this.handleQuantityChangeOne(itemId,value);
+            }
+        });
+    }
+
+    handleQuantityChangeOne(itemId,value) {
+      console.log(`vao handleQuantityChangeOne`);
+      if (value==0) { // neu bang 0
+        //console.log('vao 0');
+        let item_Name = `${this.getItemObject(itemId).name} (${this.getItemObject(itemId).unit})`;
+        this.openConfirmation_clearOne(`Bạn có muốn xóa ${item_Name}?`).then((result)=> {
+          console.log(result);
+          if (result==true) {
+              this.removeItemFromSelection(itemId); 
+              this.removeItemFromCheckedList(itemId); 
+              this.updateList();
+              this.fireChangeEvent(); 
+          } else {
+            console.log('vao update 1 cho 1 item');
+            this.updateNumberofItem(itemId,1);   
+            this.updateList();
+            this.fireChangeEvent(); 
+          }
+        });  
+      } else {
+      // neu > 0 
+      this.updateItemQuantity(itemId,value);   
+      this.updateList();
+      this.fireChangeEvent(); 
+      }
+    }
+
+    isItemChecked(itemId) {   
+      //console.log(this.checkedItems.some(item => item.id === itemId));    
+      return this.checkedItems.some(item => item.id === itemId);
+    }
+    
+    removeItemFromCheckedList(itemId) {      
+      console.log(this.checkedItems);
+      const item = this.checkedItems.find(item => item.id === itemId);
+      console.log(item);
+      if (item) {
+          this.checkedItems = this.checkedItems.filter(obj => obj.id != itemId);
+      }       
+      console.log(this.checkedItems);
+    }
+
+    addItemToCheckedList(itemId) {
+      const item = this.selectedItems.find(item => item.id === itemId);
+      if (item) {
+        this.checkedItems.push({ ...item, number: 1 });
+      }         
+    }
+
+    updateNumberofItem(itemId,value) {
+      const item = this.selectedItems.find(item => item.id === itemId);
+      if (item) {
+        item.number = value;
+      }    
+    }
 
     updateSingleItem(listItem, itemId) {
       // update Interface with logic and classList.add/remove classes
@@ -306,23 +456,17 @@ class CheckoutList extends HTMLElement {
       }
     }
 
-    isItemSelected(itemId) {       
-      return this.selectedItems.some(item => item.id === itemId);
-    }
+    // isItemSelected(itemId) {       
+    //   return this.selectedItems.some(item => item.id === itemId);
+    // }
 
-    addItemToSelection(itemId) {
-      // const selectedItem = this.items.find(item => item.id === itemId);
-      // if (selectedItem) {
-      //   this.selectedItems.push({ ...selectedItem, number: 1 });
-      // }         
-    }
-
-    removeItemFromSelection(itemId) {      
+    removeItemFromSelection(itemId) {  
       const selectedItem = this.selectedItems.find(item => item.id === itemId);
       if (selectedItem) {
           this.selectedItems = this.selectedItems.filter(obj => obj.id != itemId);
       }       
     }
+
 
     resetQuality(albumItem,itemId,value) {
         // const quantityInput = albumItem.querySelector('sl-input[type="number"]');
@@ -333,6 +477,10 @@ class CheckoutList extends HTMLElement {
     getItemQuantity(itemId) {
       // const selectedItem = this.selectedItems.find(item => item.id === itemId);
       // return selectedItem ? selectedItem.number : 1;
+    }
+
+    getItemObject(itemId) {
+      return this.selectedItems.find(item => item.id === itemId);
     }
 
     updateItemQuantity(itemId, quantity) {
@@ -370,6 +518,8 @@ class CheckoutList extends HTMLElement {
 
       const checklist_Total=this.shadowRoot.querySelector('.checklist_Total');
       checklist_Total.innerHTML=this.addDotToNumber(total);
+      const checklist_Title=this.shadowRoot.querySelector('.checklist_Title');
+      checklist_Title.innerHTML=`Tổng cộng: ${this.selectedItems.length} loại`;
 
       return total;
     } 
@@ -385,6 +535,20 @@ class CheckoutList extends HTMLElement {
       }
       if (digitN>0) parts.push(str);
       return `đ ${parts.reverse().join('.')}`;
+    }
+
+    addkToNumber(number) {
+      let thousand=number/1000;
+      let str=thousand.toString();
+      let parts = [];
+      let digitN=str.length;
+      while (digitN>3) {           
+          parts.push(str.substring(digitN-3,digitN));
+          str = str.substring(0,digitN-3);
+          digitN=str.length;
+      }
+      if (digitN>0) parts.push(str);
+      return `${parts.reverse().join('.')}k`;
     }
 
     // Always escape HTML for text arguments!
@@ -416,3 +580,77 @@ class CheckoutList extends HTMLElement {
   }
 
   customElements.define('checkout-list', CheckoutList);
+
+
+
+//   quantity_selector.addEventListener('valueChanged', (e) => {
+//     // console.log(`quantity_selector change ${e.detail.value}`);        
+
+//      // if nam chung danh sach
+//      if (this.isItemChecked(item.id)) {
+//       this.openConfirmation_Group().then((result)=> {
+//        console.log(result);
+//          if (result==true) {
+//                if (e.detail.value==0) { // neu bang 0
+//                  console.log('=0');
+//                  //console.log('vao 0');
+//                  this.openConfirmation_clearOne().then((result)=> {
+//                    console.log(result);
+//                    if (result==true) {
+//                        if (this.isItemChecked(item.id)) {
+//                          for (let i=0;i<this.checkedItems.length;i++)
+//                            this.removeItemFromSelection(this.checkedItems[i].id);
+//                        }
+//                        else { this.removeItemFromSelection(item.id); }
+//                        this.updateList();
+//                        this.fireChangeEvent(); 
+//                    }
+//                    if (result==false) {
+//                      quantity_selector.value = 1;  
+//                    }
+//                  });  
+     
+//                } else { // neu > 0
+//                  console.log('>0');
+//                  console.log(e.detail.value);
+//                  for (let i=0;i<this.checkedItems.length;i++) {
+//                    this.updateNumberofItem(this.checkedItems[i].id,e.detail.value);         
+//                  }
+//                  this.updateList();
+//                  this.fireChangeEvent();    
+//                }
+//            } else {
+//              this.updateList();
+//              this.fireChangeEvent();   
+//            }
+//        });
+//      } else { // neu nam rieng 1 minh
+//        if (e.detail.value==0) { // neu bang 0
+//          //console.log('vao 0');
+//          this.openConfirmation_clearOne().then((result)=> {
+//            console.log(result);
+//            if (result==true) {
+//                if (this.isItemChecked(item.id)) {
+//                  for (let i=0;i<this.checkedItems.length;i++)
+//                    this.removeItemFromSelection(this.checkedItems[i].id);
+//                }
+//                else { this.removeItemFromSelection(item.id); }
+//                this.updateList();
+//                this.fireChangeEvent(); 
+//            }
+//            if (result==false) {
+//              quantity_selector.value = 1;  
+//            }
+//          });  
+
+//        } else {
+//        // neu > 0 
+//        this.updateItemQuantity(item.id,e.detail.value);   
+//        this.updateList();
+//        this.fireChangeEvent(); 
+//        }
+
+//      }
+//      // console.log(`update list`);
+//      // this.updateList();          
+//  });
