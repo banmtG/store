@@ -31,10 +31,10 @@
 
 .footer {
     display:flex;
-    padding:5px;
+    padding:5px; 
     justify-content: space-between;
     align-items:flex-start;
-    height:30px;
+    height:35px;
 }
 
 
@@ -132,7 +132,3 @@
   visibility: hidden;
 }
 
-body.ready {
-  opacity: 1;
-  transition: 0.25s opacity;
-}
