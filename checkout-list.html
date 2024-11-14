@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.17.1/cdn/themes/light.css" />
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.17.1/cdn/shoelace.js"></script>  
+    <link href="./css/base.css" rel="stylesheet">
+    <script type="text/javascript" src="./checkout-list.js"></script>
+    <script type="text/javascript" src="./quantity-selector.js"></script>
+    <script type="text/javascript" src="./dialog-component.js"></script>
+    <title>Checkout-list component tester</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height:100vh;
+            font-family: var(--sl-font-sans);
+        }
+        .checkout_container {
+            width:98%;
+            height:80vh;
+            border: 1px solid #aaa;           
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <sl-button>Sl button</sl-button>
+    <quantity-selector value=12></quantity-selector>
+    <span>sometext</span> -->
+    <div class="checkout_container">
+    
+        <checkout-list></checkout-list>
+    </div>
+    <div style="display:none;">
+        <sl-button>Click me</sl-button>
+
+        <sl-select>
+            <sl-option value="option-1">Option 1</sl-option>
+        </sl-select>
+        <sl-input placeholder="Type something"></sl-input>  
+    </div>
+    
+</body>
+<script>
+    const checkout_list = document.querySelector('checkout-list');
+    // const quantity_selector = document.querySelector('quantity-selector');
+    // //quantity_selector.value=10;
+    // quantity_selector.addEventListener('valueChanged', (e) => {
+    //     console.log('New value', JSON.stringify(e.detail.value));                
+    // });  
+
+    console.log(checkout_list);
+    const checkoutItems = {
+  "selectedItems": [
+    {
+      "category": "Món_mặn_chính",
+      "id": "B0001",
+      "name": "Bánh tortilla nhân bò băm phô mai",
+      "price": 17000,
+      "unit": "khoanh",
+      "description": "Bò, phô mai, trứng, bột mì, sữa, đường, muối, đậu phộng",
+      "minOrder": 20,
+      "url": [
+        "https://lh3.googleusercontent.com/d/1wyQBph5kOdgqlzaPVjr34EsQKhRn76Se",
+        "https://lh3.googleusercontent.com/d/1AKtPpCb-vLTsfQo9Y5AmqVt2dOV14Yh_"
+      ],
+      "number": 1
+    },
+    {
+      "category": "Món_mặn_chính",
+      "id": "B0002",
+      "name": "Bánh tortilla nhân gà sốt bbq",
+      "price": 17000,
+      "unit": "khoanh",
+      "description": "Bột mì, gà, bột ngọt",
+      "minOrder": 20,
+      "url": [
+        "https://lh3.googleusercontent.com/d/1qDVmuhBaB7XJArd3ZqCUmXKl_D58gSO9"
+      ],
+      "number": 3
+    },
+    {
+      "category": "Món_mặn_chính",
+      "id": "B0011",
+      "name": "Bánh tortilla nhân bò băm phô mai",
+      "price": 22000,
+      "unit": "cuộn",
+      "description": "Bò, phô mai, trứng, bột mì, sữa, đường, muối, đậu phộng",
+      "minOrder": 20,
+      "url": [
+        "https://lh3.googleusercontent.com/d/19w79c2_R6ar5xefc5qOEc2zvnrlDpB9A"
+      ],
+      "number": 14
+    },
+    {
+      "category": "Món_mặn_chính",
+      "id": "B1002",
+      "name": "Bánh mì baguette cá ngừ ",
+      "price": 15000,
+      "unit": "cái",
+      "description": "Bột mì, bột ngọt",
+      "minOrder": 20,
+      "url": [
+        "https://lh3.googleusercontent.com/d/1VIIng3pzuwgVyu7u9nOLUYFGIupsivHn"
+      ],
+      "number": 1
+    },
+    {
+      "category": "Món_mặn_chính",
+      "id": "B1001",
+      "name": "Bánh mì baguette salad nga ",
+      "price": 15000,
+      "unit": "cái",
+      "description": "Bột mì, bột ngọt",
+      "minOrder": 20,
+      "url": [
+        "https://lh3.googleusercontent.com/d/12_VJo0AS41AdedfgZ0Kf31Rv8SmkTkLL",
+        "https://lh3.googleusercontent.com/d/14N5xzQd4SSrztGHr7wj9t3Wm_Pf86_PM"
+      ],
+      "number": 12
+    },
+    {
+      "category": "Món_mặn_chính",
+      "id": "B0012",
+      "name": "Bánh tortilla nhân gà sốt bbq",
+      "price": 22000,
+      "unit": "cuộn",
+      "description": "Bột mì, gà, bột ngọt",
+      "minOrder": 20,
+      "url": [
+        "https://lh3.googleusercontent.com/d/1muTTvgyl0AUvURa5iWzCPpl-73BKyciM"
+      ],
+      "number": 130
+    },
+    {
+      "category": "Bánh_ngọt",
+      "id": "B4001",
+      "name": "Waflle ngọt ",
+      "price": 10000,
+      "unit": "cái",
+      "description": "Bột mì, bột ngọt",
+      "minOrder": 20,
+      "url": [
+        "https://lh3.googleusercontent.com/d/1szoxHk6BTxw2CuhLU7lr59aCPgflb6Zk"
+      ],
+      "number": 3
+    }
+  ],
+  "total":  3461000
+};
+    console.log(checkoutItems);
+    checkout_list.items = checkoutItems;
+
+</script>
+</html>

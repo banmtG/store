@@ -1,0 +1,59 @@
+.container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background-color: #D5D8DC;
+    font-family: var(--sl-font-sans);
+    font-size: 1.2rem;
+    color: #2E4053;
+    border-radius: 5px;
+  }
+  
+  .header {
+      display:flex;
+      padding-top:20px;
+      justify-content: center;
+      align-items:center;
+      opacity: 0.8;
+  }
+  
+  .contact_form_title {
+      font-size:1.2rem;
+      font-weight:600; 
+  }
+
+  .contact_info {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }  
+
+  .glowing::part(base) {
+    outline: none;
+    border-color: red;
+    box-shadow: 0px 0px 5px red; 
+  }
+
+  .italictext::part(form-control-help-text) {
+    font-style: italic;
+    opacity: 0.7;
+  }
+      
+  .footer {
+      display:flex;
+      opacity: 0.9;
+      padding:15px;
+      justify-content: space-between;
+      align-items:flex-start;
+  }
+     
+
+  .hidden {
+    display: none;
+  }
+
+  :not(:defined) {
+    visibility: hidden;
+  }
+  

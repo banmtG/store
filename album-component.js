@@ -52,7 +52,8 @@ class PhotoAlbum extends HTMLElement {
 
     render() {
       this.shadowRoot.innerHTML = `
-        <style>
+        <style>        
+
           .container {
             position: relative;
             height: 100%;
@@ -93,6 +94,16 @@ class PhotoAlbum extends HTMLElement {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             gap: 4px;
+          }
+
+          #category-select::part(form-control) {
+            min-width:130px;
+            max-width:45vw;
+          }
+
+          #search-input::part(form-control) {
+            max-width:45vw;
+            min-width:130px;
           }
 
           .album-grid::-webkit-scrollbar {
@@ -218,15 +229,10 @@ class PhotoAlbum extends HTMLElement {
             display:none;
           }
 
-        </style>
-
-       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.17.1/cdn/themes/light.css" />
-    <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.17.1/cdn/shoelace-autoloader.js"></script>
-        
+        </style>          
   
         <div class="container">
           <div class="filter-bar">
-
                 <sl-select class="filter-item" size="small" id="category-select">
                     <sl-option value="">All Categories</sl-option>
                 </sl-select>                      

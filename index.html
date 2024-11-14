@@ -4,12 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.17.1/cdn/themes/light.css" />
-  <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.17.1/cdn/shoelace-autoloader.js"></script>  
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.17.1/cdn/shoelace.js"></script>  
+  <link href="./css/base.css" rel="stylesheet">
+  
   <script type="text/javascript" src="./loading-icon.js"></script>
   <script type="text/javascript" src="./quantity-selector.js"></script>
   <script type="text/javascript" src="./checkout-list.js"></script>
-  <title>Display Google Drive Images</title>
+  <script type="text/javascript" src="./dialog-component.js"></script>
+  <title>Jolie catering</title>
   <style>
+  
     html, body {
         margin:0;
         padding:0;
@@ -23,8 +27,9 @@
         position: sticky;
         top: 0;
         background-color:#AAB7B8;
-        z-index: 10;
+        z-index: 10;        
         padding: 10px;
+        padding-top:20px;
         display: flex;
         justify-content: right;
         align-items: center;
@@ -46,13 +51,17 @@
     }
     
     .totalItem {
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
         right:5px;
-        top: 5px;
+        top: 13px;
         position:absolute;
         border-radius: 50%;   
-        padding-top:3px;     
-        width:16px;
-        height:16px;
+        padding-top:2px;     
+        width:18px;
+        height:18px;
         text-align: center;
         font-size:0.7rem;
         background-color:#ccc;
@@ -60,7 +69,7 @@
     }
 
     .album_container {
-        height: calc(100vh - 81px);
+        height: calc(100vh - 91px);
         border:1px solid #ccc;
     }
 
@@ -117,6 +126,15 @@
     .hidden {
         display:none;
     }
+
+    :not(:defined) {
+        visibility: hidden;
+    }
+
+    body.ready {
+        opacity: 1;
+        transition: 0.25s opacity;
+    }
   </style>
   <!-- <script type="text/javascript" src="./album.js"></script> -->
   <script type="text/javascript" src="./album-component.js"></script>
@@ -146,14 +164,14 @@
 <body>
 <div class="top_line">   
     <div>
-        <h2>Julie catering</h2>
+        <h2>Jolie catering</h2>
     </div>
   
     <span class="totalPrice"></span>
     <sl-button id="view-cart" variant="default" size="small">
         <sl-icon name="cart3"></sl-icon> 
     </sl-button>   
-    <span class="totalItem hidden"></span>
+    <div class="totalItem hidden"></div>
 
     <!-- <sl-button  class="filter-item" id="clear-selection" variant="default" size="small">
         <sl-icon slot="suffix" name="arrow-counterclockwise"></sl-icon>
@@ -164,7 +182,7 @@
   <photo-album></photo-album>
 </div> 
 <div class="page_footer">
-    <sl-button  class="filter-item" id="clear-selection" variant="text" size="small">
+    <sl-button variant="text" size="small">
         <sl-icon slot="prefix" name="c-circle"></sl-icon>
         Julie catering
     </sl-button>  
@@ -186,6 +204,13 @@
         document.body.appendChild(view_cart_Popup);
 
         const checkout_list = document.querySelector('checkout-list');
+
+        checkout_list.addEventListener('removeCheckout',(e)=> {
+            view_cart_Popup.remove();  
+            album.setSelectedItems = JSON.parse(localStorage.getItem("selectedItems")).selectedItems;
+
+        });
+
 
         view_cart_Popup.addEventListener('click',(e)=> {
             e.stopPropagation();   
@@ -413,13 +438,13 @@
 
   </script>
 
-<div class="hidden">
+<!-- <div class="hidden">
     <sl-button>Click me</sl-button>
     <i class="fa-solid fa-minus"> </i>
     <sl-select>
         <sl-option value="option-1">Option 1</sl-option>
     </sl-select>
     <sl-input placeholder="Type something"></sl-input>  
-</div>
+</div> -->
 </body>
 </html>

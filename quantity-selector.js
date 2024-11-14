@@ -17,7 +17,7 @@ class QuantitySelector extends HTMLElement {
           flex-direction: row;
           justify-content: space-between;
           align-items: center;
-          width: 86px;w
+          width: 86px;
           height: auto;
         }
 
@@ -42,6 +42,10 @@ class QuantitySelector extends HTMLElement {
         input[type=number]::-webkit-outer-spin-button {
             -webkit-appearance: none;
             margin: 0;
+        }
+
+        input[type=number] {
+            -moz-appearance:textfield;
         }
 
       </style>`
@@ -133,16 +137,21 @@ class QuantitySelector extends HTMLElement {
     }      
 
     checkandChangeValue(valuequantityInput) {
-      this.oldValue = this.number;
-      const value = parseInt(valuequantityInput);
-      console.log(value);
-      if (value>=0) this.updateValue(value); else {
-        if (valuequantityInput!=="") {             
-          this.updateValue(this.oldValue);
-          this.oldValue = this.number;
-        } else this.updateValue(0);
-        this.render();
-      }
+      
+      let value = parseInt(valuequantityInput);
+      this.updateValue(value);
+      this.render();
+      // this.oldValue = this.number;
+      // const value = parseInt(valuequantityInput);
+      // console.log(value);
+      // if (value>=0) { this.updateValue(value); }
+      // else {
+      //   if (valuequantityInput!=="") {             
+      //     this.updateValue(this.oldValue);
+      //     this.oldValue = this.number;
+      //   } else this.updateValue(0);
+      //   this.render();
+      // }
       this.fireChangeEvent();    
     }
 
@@ -153,6 +162,7 @@ class QuantitySelector extends HTMLElement {
     }
 
     fireChangeEvent() {
+        console.log('change');
         const event = new CustomEvent('valueChanged', {
             detail: { value: this.number || 0}
             });

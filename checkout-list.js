@@ -13,8 +13,9 @@ class CheckoutList extends HTMLElement {
       this.lastScrollTop = 0;
       this.listStyle = 'shopee';
       this.componentCSS = `<link rel="stylesheet" href="./checkout-list.css" />`;
-      this.CSSJSlibraries =` <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.17.1/cdn/themes/light.css" />
-      <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.17.1/cdn/shoelace-autoloader.js"></script>`;
+      this.CSSJSlibraries = ``;
+      // this.CSSJSlibraries =` <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.17.1/cdn/themes/light.css" />
+      // <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.17.1/cdn/shoelace-autoloader.js"></script>`;
     }
     
     connectedCallback() {
@@ -69,13 +70,28 @@ class CheckoutList extends HTMLElement {
       this.shadowRoot.innerHTML = `${this.componentCSS}${this.CSSJSlibraries}
         <div class="container">
           <div class="header">
-           <span class="checklist_Title">Đơn hàng</span>           
+           <span class="checklist_Title">Các món đã chọn</span>           
            <div class="checklist_Total">${this.addDotToNumber(this.total)}</div>           
           </div>
           <div class="item_list"></div>
-          <div class="footer">           
+          <div class="footer">   
+             <sl-button class="backBtn" variant="default" size="small">
+                <sl-icon slot="prefix" name="backspace"></sl-icon>Quay lại 
+             </sl-button>  
+             <sl-button class="clearBtn" variant="default" size="small">
+                <sl-icon slot="prefix" name="stars"></sl-icon>Xóa hết 
+             </sl-button>
+             <sl-button class="nextBtn" variant="default" size="small">
+                <sl-icon slot="suffix" name="backspace-reverse"></sl-icon>Tiếp theo
+             </sl-button>        
           </div>  
         </div>
+        <sl-dialog label="Xác nhận" class="dialog_clearAll" style="--width: 50vw;">
+           Bạn có chắc chắn muốn xóa hết đơn hàng?
+          <sl-button slot="footer" name="confirmBtn_clearAll" variant="primary">Chắc chắn</sl-button>
+          <sl-button slot="footer" name="cancelBtn_clearAll" variant="primary">Hủy bỏ</sl-button>
+        </sl-dialog>
+         <dialog-component></dialog-component>
         `;
 
       // DECLARE DIVs inside the component skeleton for later use
@@ -83,6 +99,50 @@ class CheckoutList extends HTMLElement {
       const header=this.shadowRoot.querySelector('.header');
       const item_list=this.shadowRoot.querySelector('.item_list');
       const footer=this.shadowRoot.querySelector('.footer');
+      const backBtn=this.shadowRoot.querySelector('.backBtn');
+      const clearBtn=this.shadowRoot.querySelector('.clearBtn');
+
+
+      // const dialog_clearAll = this.shadowRoot.querySelector('.dialog_clearAll');
+      //const confirmBtn_clearAll = dialog_clearAll.querySelector('sl-button[name="confirmBtn_clearAll"]');
+      backBtn.addEventListener('click', () => {
+        this.fireRemoveEvent();
+      });
+
+
+      clearBtn.addEventListener('click', () => {         
+        this.openConfirmation_clearAll().then((result)=> {
+          if (result==true) {
+            this.selectedItems = [];          
+            this.updateList(); 
+            this.fireChangeEvent(); 
+          }
+        });  
+      });
+      // //openButton.addEventListener('click', () => dialog.show());
+      // confirmBtn_clearAll.addEventListener('click', () =>{
+      //     this.selectedItems = [];          
+      //     this.updateList(); 
+      //     this.fireChangeEvent(); 
+      //     this.fireRemoveEvent();
+      //     dialog_clearAll.hide();          
+      // });
+
+      // const cancelBtn_clearAll = dialog_clearAll.querySelector('sl-button[name="cancelBtn_clearAll"]');
+      // //openButton.addEventListener('click', () => dialog.show());
+      // cancelBtn_clearAll.addEventListener('click', () =>{
+      //   dialog_clearAll.hide();
+      // });
+
+      // backBtn.addEventListener('click', ()=>{
+      //   this.fireRemoveEvent();
+      // })
+
+      // clearBtn.addEventListener('click', ()=>{
+      //   dialog_clearAll.show();
+      //   //this.notify("Bạn có chắc xóa hết đơn hàng", "warning", "exclamation-triangle" );
+      // })
+
 
 
       // ADD addEventListener FOR EACH div/button declared in this skeleton.
@@ -147,12 +207,22 @@ class CheckoutList extends HTMLElement {
          const quantity_selector = listItem.querySelector('quantity-selector');
 
         // ADD addEventListener FOR EACH div/button declared in this skeleton.
+        
         item_deleteBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            this.removeItemFromSelection(item.id);
-            this.updateList();
-            this.fireChangeEvent();
+            
+            this.openConfirmation_clearOne().then((result)=> {
+              if (result==true) {
+                  this.removeItemFromSelection(item.id);
+                  this.updateList();
+                  this.fireChangeEvent(); 
+              }
+            });  
+           
         });
+
+
+
 
         // quantity_selector.addEventListener('valueChanged', (e) => {
         //   this.updateItemQuantity(item.id,e.detail.value);          
@@ -161,9 +231,19 @@ class CheckoutList extends HTMLElement {
         quantity_selector.addEventListener('valueChanged', (e) => {
           console.log(`quantity_selector change ${e.detail.value}`);
           if (e.detail.value==0) {
-              this.removeItemFromSelection(item.id);
-              this.updateList();
-              //this.updateSingleItem(albumItem, item.id);
+            console.log('vao 0');
+            this.openConfirmation_clearOne().then((result)=> {
+              console.log(result);
+              if (result==true) {
+                  this.removeItemFromSelection(item.id);
+                  this.updateList();
+                  this.fireChangeEvent(); 
+              }
+              if (result==false) {
+                quantity_selector.value = 1;  
+              }
+            });  
+
           }
           this.updateItemQuantity(item.id,e.detail.value);    
           this.fireChangeEvent();      
@@ -178,6 +258,39 @@ class CheckoutList extends HTMLElement {
 
       });
     }
+
+  async openConfirmation_clearOne() {
+      const dialog = this.shadowRoot.querySelector('dialog-component');    
+      const userConfirmed = await dialog.show(
+          {
+              label : "Xác nhận", 
+              message : `<sl-icon name="exclamation-triangle"></sl-icon><span>Bạn có muốn xóa?</span>`,
+              okbtn : "Đồng ý",
+              cancelbtn : "Không", 
+              closeOnOverlay : true
+          });                          
+      //console.log(userConfirmed);     
+      return userConfirmed;
+  }
+
+  async openConfirmation_clearAll() {
+    const dialog = this.shadowRoot.querySelector('dialog-component');    
+    const userConfirmed = await dialog.show(
+        {
+            label : "Xác nhận", 
+            message : `<sl-icon name="exclamation-triangle"></sl-icon><span>Bạn có muốn xóa hết đơn hàng?</span>`,
+            okbtn : "Đồng ý",
+            cancelbtn : "Không", 
+            closeOnOverlay : true
+        });                          
+    //console.log(userConfirmed);     
+    return userConfirmed;
+}
+
+
+  // dialog.addEventListener('resovleEvent', (event) => {
+  //     console.log(event.detail.result);
+  // })
 
     updateSingleItem(listItem, itemId) {
       // update Interface with logic and classList.add/remove classes
@@ -237,6 +350,16 @@ class CheckoutList extends HTMLElement {
            }
           });
       this.dispatchEvent(event);
+      if (this.selectedItems.length==0) this.fireRemoveEvent();
+    }
+
+    fireRemoveEvent() {
+      const event = new CustomEvent('removeCheckout', {
+          detail: { selectedItems: this.selectedItems,
+              total: this.calculateAndUpdateTotal(),
+           }
+          });
+      this.dispatchEvent(event);
     }
 
     calculateAndUpdateTotal() {
@@ -262,7 +385,32 @@ class CheckoutList extends HTMLElement {
       }
       if (digitN>0) parts.push(str);
       return `đ ${parts.reverse().join('.')}`;
-  }
+    }
+
+    // Always escape HTML for text arguments!
+    escapeHtml(html) {
+      const div = document.createElement('div');
+      div.textContent = html;
+      return div.innerHTML;
+    }
+  
+    // Custom function to emit toast notifications
+
+    notify(message, variant = 'primary', icon = 'info-circle', duration = 4000) {
+      const alert = Object.assign(document.createElement('sl-alert'), {
+        variant,
+        closable: true,
+        duration: duration,
+        countdown: "rtl",
+        innerHTML: `
+          <sl-icon name="${icon}" slot="icon"></sl-icon>
+          ${this.escapeHtml(message)}
+        `
+      });
+      console.log(`vao notify`);
+      this.shadowRoot.append(alert);
+      return alert.toast();
+    }
     
 
   }
