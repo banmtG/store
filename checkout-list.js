@@ -70,7 +70,7 @@ class CheckoutList extends HTMLElement {
       this.shadowRoot.innerHTML = `${this.componentCSS}${this.CSSJSlibraries}
         <div class="container">
           <div class="header">
-           <span class="checklist_Title">Các món đã chọn</span>           
+           <span class="checklist_Title">Tổng cộng: ${this.selectedItems.length} loại</span>           
            <div class="checklist_Total">${this.addDotToNumber(this.total)}</div>           
           </div>
           <div class="item_list"></div>
@@ -192,7 +192,7 @@ class CheckoutList extends HTMLElement {
               <img src="${item.url[0]}" alt="${item.name}">
             </div>
             <div class="item_info">                
-              <span>  ${item.name}</span>
+              <span>  ${item.name} (${item.unit}) </span>
               <quantity-selector value=${item.number}></quantity-selector>             
             </div>
              <div class="item_deleteBtn">            
@@ -278,7 +278,7 @@ class CheckoutList extends HTMLElement {
     const userConfirmed = await dialog.show(
         {
             label : "Xác nhận", 
-            message : `<sl-icon name="exclamation-triangle"></sl-icon><span>Bạn có muốn xóa hết đơn hàng?</span>`,
+            message : `<sl-icon name="exclamation-triangle"></sl-icon><span>Xóa hết danh sách?</span>`,
             okbtn : "Đồng ý",
             cancelbtn : "Không", 
             closeOnOverlay : true
