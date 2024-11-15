@@ -68,6 +68,7 @@ class QuantitySelector extends HTMLElement {
         if (name === 'max') this.maxValue = parseInt(newValue);
         if (name === 'value') {
           this.number = parseInt(newValue);
+          this.oldValue = parseInt(newValue);
           this.render();
         }
     }
@@ -124,20 +125,32 @@ class QuantitySelector extends HTMLElement {
       });
 
       quantityInput.addEventListener('blur',(e)=> {
-        this.checkandChangeValue(quantityInput.value);
+        console.log(this.oldValue);
+          console.log(quantityInput.value);
+          if (this.oldValue !== parseInt(quantityInput.value)) {
+            this.checkandChangeValue(quantityInput.value);
+          } else {
+            this.oldValue = quantityInput.value;
+          }
       });
       
       quantityInput.addEventListener('keyup',(e)=> {
         if (e.key === 'Enter' || e.keyCode === 13) {
-          this.checkandChangeValue(quantityInput.value);
+          console.log(this.oldValue);
+          console.log(quantityInput.value);
+          if (this.oldValue !== parseInt(quantityInput.value)) {
+            this.checkandChangeValue(quantityInput.value);
+          } else {
+            this.oldValue = quantityInput.value;
+          }
         }        
       }); 
 
      
     }      
 
-    checkandChangeValue(valuequantityInput) {
-      
+    checkandChangeValue(valuequantityInput) {  
+      console.log('vaof checkandChangeValue');    
       let value = parseInt(valuequantityInput);
       this.updateValue(value);
       this.render();

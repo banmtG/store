@@ -79,20 +79,16 @@ class CheckoutList extends HTMLElement {
              <sl-button class="backBtn" variant="default" size="small">
                 <sl-icon slot="prefix" name="backspace"></sl-icon>Quay lại 
              </sl-button>  
-             <sl-button class="clearBtn" variant="default" size="small">
-                <sl-icon slot="prefix" name="stars"></sl-icon>Xóa hết 
+             <sl-button class="selectAllOnOff" variant="default" size="small">
+                <sl-icon slot="prefix" name="stars"></sl-icon>
+                <span class="selectAllOnOff_span">Chọn hết</span>
              </sl-button>
              <sl-button class="nextBtn" variant="default" size="small">
                 <sl-icon slot="suffix" name="backspace-reverse"></sl-icon>Tiếp theo
              </sl-button>        
           </div>  
         </div>
-        <sl-dialog label="Xác nhận" class="dialog_clearAll" style="--width: 50vw;">
-           Bạn có chắc chắn muốn xóa hết đơn hàng?
-          <sl-button slot="footer" name="confirmBtn_clearAll" variant="primary">Chắc chắn</sl-button>
-          <sl-button slot="footer" name="cancelBtn_clearAll" variant="primary">Hủy bỏ</sl-button>
-        </sl-dialog>
-         <dialog-component></dialog-component>
+        <dialog-component></dialog-component>
         `;
 
       // DECLARE DIVs inside the component skeleton for later use
@@ -101,7 +97,8 @@ class CheckoutList extends HTMLElement {
       const item_list=this.shadowRoot.querySelector('.item_list');
       const footer=this.shadowRoot.querySelector('.footer');
       const backBtn=this.shadowRoot.querySelector('.backBtn');
-      const clearBtn=this.shadowRoot.querySelector('.clearBtn');
+      const selectAllOnOff=this.shadowRoot.querySelector('.selectAllOnOff');
+      const selectAllOnOff_span=this.shadowRoot.querySelector('.selectAllOnOff_span');
 
 
       // const dialog_clearAll = this.shadowRoot.querySelector('.dialog_clearAll');
@@ -111,15 +108,21 @@ class CheckoutList extends HTMLElement {
       });
 
 
-      clearBtn.addEventListener('click', () => {         
-        this.openConfirmation_clearAll().then((result)=> {
-          if (result==true) {
-            this.selectedItems = [];          
-            this.updateList(); 
-            this.fireChangeEvent(); 
-          }
-        });  
+      selectAllOnOff.addEventListener('click', () => {   
+        if (selectAllOnOff_span.innerText === "Bỏ chọn hết")
+        {
+          selectAllOnOff_span.innerText = "Chọn hết";
+          this.checkedItems = [];
+        } else 
+        {
+          selectAllOnOff_span.innerText = "Bỏ chọn hết";
+          this.checkedItems = this.selectedItems.slice();
+        }
+        this.updateList(); 
+        this.fireChangeEvent(); 
+          
       });
+
       // //openButton.addEventListener('click', () => dialog.show());
       // confirmBtn_clearAll.addEventListener('click', () =>{
       //     this.selectedItems = [];          
@@ -203,7 +206,7 @@ class CheckoutList extends HTMLElement {
               </div>
             </div>
              <div class="item_deleteBtn">            
-                ⛔             
+                <button class="transparentBtn">⛔</button>
             </div>         
           </div>
         `;
@@ -223,7 +226,6 @@ class CheckoutList extends HTMLElement {
         checkbox.addEventListener('click',(e)=> {   
           e.stopPropagation();
           if (!checkbox.checked) { 
-
             this.removeItemFromCheckedList(item.id);     
           } 
           else {
@@ -253,26 +255,17 @@ class CheckoutList extends HTMLElement {
         // ADD addEventListener FOR EACH div/button declared in this skeleton.
         
         item_deleteBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            
-            this.openConfirmation_clearOne(`Bạn có muốn xóa ${item.name}`).then((result)=> {
-              if (result==true) {
-                  if (this.isItemChecked(item.id)) {
-                    for (let i=0;i<this.checkedItems.length;i++)
-                      this.removeItemFromSelection(this.checkedItems[i].id);
-                  }
-                  else { this.removeItemFromSelection(item.id); }
-                  this.updateList();
-                  this.fireChangeEvent(); 
-              }
-            });  
-           
+          setTimeout(()=> { 
+            e.stopPropagation();    
+            console.log(e);        
+            this.handleDelete(item.id);        
+          },500)   
         });
 
 
         quantity_selector.addEventListener('valueChanged', (e) => {
            // if nam chung danh sach
-           if (this.isItemChecked(item.id)) {
+           if (this.isItemChecked(item.id) && this.checkedItems.length>1) {
             this.handleQuantityChangeGroup(item.id,e.detail.value);
            } else { // neu nam rieng 1 minh
             this.handleQuantityChangeOne(item.id,e.detail.value);
@@ -297,6 +290,12 @@ class CheckoutList extends HTMLElement {
     }
 
   async openConfirmation_clearOne(value) {
+      // const htmlDialog=`<dialog-component class="dClearOne"></dialog-component>`;
+      // const container = document.createElement('div');
+      //   container.innerHTML = htmlDialog;
+      // this.shadowRoot.appendChild(container);
+      // const dialog = container.firstElementChild;
+
       const dialog = this.shadowRoot.querySelector('dialog-component');    
       const userConfirmed = await dialog.show(
           {
@@ -342,6 +341,25 @@ class CheckoutList extends HTMLElement {
   // dialog.addEventListener('resovleEvent', (event) => {
   //     console.log(event.detail.result);
   // })
+
+    handleDelete(itemId) {
+      let notification_string = "";
+      if (this.isItemChecked(itemId) && this.checkedItems.length>1) { notification_string = `Bạn có muốn xóa ${this.checkedItems.length} loại?`; 
+     } else notification_string = `Bạn có muốn xóa ${this.getItemObject(itemId).name} (${this.getItemObject(itemId).unit})`;
+     this.openConfirmation_clearOne(notification_string).then((result)=> {
+       if (result==true) {
+           if (this.isItemChecked(itemId)) {
+             for (let i=0;i<this.checkedItems.length;i++)
+               this.removeItemFromSelection(this.checkedItems[i].id);
+             this.checkedItems = [];
+           }
+           else { this.removeItemFromSelection(itemId); }
+           this.updateList();
+           this.fireChangeEvent(); 
+       }
+     });  
+
+    }
 
     handleQuantityChangeGroup(itemId,value) {
       this.openConfirmation_Group().then((result)=> {
@@ -419,13 +437,13 @@ class CheckoutList extends HTMLElement {
     }
     
     removeItemFromCheckedList(itemId) {      
-      console.log(this.checkedItems);
+     // console.log(this.checkedItems);
       const item = this.checkedItems.find(item => item.id === itemId);
-      console.log(item);
+     // console.log(item);
       if (item) {
           this.checkedItems = this.checkedItems.filter(obj => obj.id != itemId);
       }       
-      console.log(this.checkedItems);
+      //console.log(this.checkedItems);
     }
 
     addItemToCheckedList(itemId) {

@@ -111,6 +111,16 @@
     /* background-color: #2E4053;  */
 }
 
+.transparentBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  margin:0;
+  background: none;
+  border: none;
+}
+
 .item_info span {
     width:95%;
     font-size:1rem;

@@ -348,7 +348,7 @@ class ContactForm extends HTMLElement {
         duration: duration,
         countdown: "rtl",
         innerHTML: `
-          <sl-icon name="${icon}" slot="icon"></sl-icon>
+                                
           ${this.escapeHtml(message)}
         `
       });

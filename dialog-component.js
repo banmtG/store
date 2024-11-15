@@ -70,13 +70,21 @@ class DialogComponent extends HTMLElement {
           font-size: 1.2rem;
       }
 
-      sl-button::part(base) {
-          background: var(--theme-color); 
-          color: black;
-          border: none;
+      button {
+        border-radius: 5px;
+        display:flex;
+        justify-content: center;
+        align-items: center;
+        background: var(--theme-color); 
+        color: rgba(0,0,75,0.7);
+        border: none;
+        padding: 5px 10px;
+        font-size:1.1rem;        
       }
-       
-       
+
+      .buttonfocused {
+        outline: 2px solid blue;
+      }
 
     .hidden {      
       display: none;
@@ -86,10 +94,9 @@ class DialogComponent extends HTMLElement {
   }
   
   connectedCallback() {
+   
     this.render(); // setup all HTML and CSS skeleton of the Component
     this.overlay.style.display = "none";
-
-
   }
 
   disconnectedCallback() {
@@ -134,14 +141,14 @@ class DialogComponent extends HTMLElement {
       <div class='dialog'>
           <div class="header">
               <div class="header_Label">${this.label}</div>
-              <sl-icon-button class="closeBtn" slot="header-actions" name="x-lg"></sl-icon-button>    
+              <button class="closeBtn"><sl-icon name="x-lg"></sl-icon></button>    
           </div>     
           <div class="center">        
               ${this.message}     
           </div> 
           <div class="footer">
-              <sl-button name="confirmBtn" size="medium" variant="primary">${this.OK}</sl-button>
-              <sl-button name="cancelBtn" size="medium" variant="primary">${this.cancel}</sl-button>
+              <button name="confirmBtn" size="medium" variant="primary">${this.OK}</button>
+              <button name="cancelBtn" size="medium" variant="primary">${this.cancel}</button>
           </div>
       </div>
   </div>  
@@ -151,11 +158,15 @@ class DialogComponent extends HTMLElement {
       this.overlay = this.shadowRoot.querySelector('.container');
       this.header_Label = this.dialog.querySelector('.header_Label');
       this.center = this.dialog.querySelector('.center');
-      this.confirmBtn = this.dialog.querySelector('sl-button[name="confirmBtn"]');
-      this.cancelBtn = this.dialog.querySelector('sl-button[name="cancelBtn"]');
+      this.confirmBtn = this.dialog.querySelector('button[name="confirmBtn"]');
+      this.cancelBtn = this.dialog.querySelector('button[name="cancelBtn"]');
       this.closeBtn = this.dialog.querySelector('.closeBtn');
+      
+      this.focusFirstElement();
+      this.shadowRoot.addEventListener("keydown", this.trapFocus.bind(this));
 
-      this.addEventListeners();   
+      this.addEventListeners();  
+
     // DECLARE DIVs inside the component skeleton for later use   
   }          
 
@@ -170,6 +181,8 @@ class DialogComponent extends HTMLElement {
     this.cancelBtn.addEventListener('click',(e) => this._resolveDialog(false));
     this.closeBtn.addEventListener('click',(e) => this._resolveDialog(false));
     this.overlay.addEventListener('click',(e) => this._onOverlayClick(e));
+   
+
   }
 
   removeEventListeners() {
@@ -179,18 +192,68 @@ class DialogComponent extends HTMLElement {
     this.overlay.removeEventListener('click',(e) => this._onOverlayClick(e));
   }
 
+  focusFirstElement() {
+    const focusableElements = this.getFocusableElements();
+    if (focusableElements.length > 0) {
+      focusableElements[1].focus();
+      focusableElements[1].classList.add('buttonfocused');
+    }
+  }
+
+  getFocusableElements() {
+    return Array.from(
+      this.shadowRoot.querySelectorAll("button, input, textarea, select, a[href]")
+    ).filter((el) => !el.hasAttribute("disabled"));
+  }
+
+  trapFocus(event) {
+    const focusableElements = this.getFocusableElements();
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+
+
+    if (event.key === "Escape") {
+      this._resolveDialog(false);
+    }
+
+    if (event.key === "Tab") {
+      for (const item of focusableElements) {
+        item.classList.remove('buttonfocused');
+      }
+
+      if (event.shiftKey) {
+        // Shift + Tab navigation
+        if (this.shadowRoot.activeElement === firstElement) {
+          event.preventDefault();
+          lastElement.focus();
+        }
+      } else {
+        // Regular Tab navigation
+        if (this.shadowRoot.activeElement === lastElement) {
+          event.preventDefault();
+          firstElement.focus();
+        }
+      }
+    }
+  }
+
   show({label = "Confirmation", message = "Are you sure?",okbtn = "OK",cancelbtn="Cancel", closeOnOverlay = false} = {}) {
     
     this.label = label;
     this.message = message;
     this.OK = okbtn;
     this.cancel= cancelbtn;
-
+    this.render();
     this.closeOnOverlay = closeOnOverlay;
     this.overlay.style.display = "flex";
-    this.render();
+    this.overlay.focus();
 
+  
+   // console.log(this.confirmBtn); 
     return new Promise((resovleFunction) => {
+
+      this.focusFirstElement();
+
       this._resolveDialog = (value) => {
         this.overlay.style.display = "none";  
         this.ResolveEvent(value);
@@ -211,3 +274,5 @@ class DialogComponent extends HTMLElement {
 }
 
 customElements.define('dialog-component', DialogComponent);
+
+
