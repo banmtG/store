@@ -199,7 +199,7 @@ class CheckoutList extends HTMLElement {
               <div class="item_info_quantity_price">
                 <div class="item_info_quantity_unitprice">
                   <quantity-selector value=${item.number}></quantity-selector>
-                  <div>x${this.addkToNumber(item.price)}</div>
+                  <div>x ${this.addkToNumber(item.price)}</div>
                 </div>
                 <div>${this.addkToNumber(item.number*item.price)}</div>
               </div>
@@ -269,12 +269,10 @@ class CheckoutList extends HTMLElement {
          //console.log(checkbox);
         // ADD addEventListener FOR EACH div/button declared in this skeleton.
         
-        item_deleteBtn.addEventListener('click', (e) => {
-          setTimeout(()=> { 
+        item_deleteBtn.addEventListener('click', (e) => {     
             e.stopPropagation();    
             console.log(e);        
-            this.handleDelete(item.id);        
-          },500)   
+            this.handleDelete(item.id); 
         });
 
 
