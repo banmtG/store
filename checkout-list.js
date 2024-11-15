@@ -71,7 +71,7 @@ class CheckoutList extends HTMLElement {
       this.shadowRoot.innerHTML = `${this.componentCSS}${this.CSSJSlibraries}
         <div class="container">
           <div class="header">
-           <span class="checklist_Title">Tổng cộng: ${this.selectedItems.length} loại</span>           
+           <span class="checklist_Title">Danh sách có ${this.selectedItems.length} món</span>           
            <div class="checklist_Total">${this.addDotToNumber(this.total)}</div>           
           </div>
           <div class="item_list"></div>
@@ -99,7 +99,6 @@ class CheckoutList extends HTMLElement {
       const backBtn=this.shadowRoot.querySelector('.backBtn');
       const selectAllOnOff=this.shadowRoot.querySelector('.selectAllOnOff');
       const selectAllOnOff_span=this.shadowRoot.querySelector('.selectAllOnOff_span');
-
 
       // const dialog_clearAll = this.shadowRoot.querySelector('.dialog_clearAll');
       //const confirmBtn_clearAll = dialog_clearAll.querySelector('sl-button[name="confirmBtn_clearAll"]');
@@ -200,7 +199,7 @@ class CheckoutList extends HTMLElement {
               <div class="item_info_quantity_price">
                 <div class="item_info_quantity_unitprice">
                   <quantity-selector value=${item.number}></quantity-selector>
-                  <div>x ${this.addkToNumber(item.price)} =</div>
+                  <div>x${this.addkToNumber(item.price)}</div>
                 </div>
                 <div>${this.addkToNumber(item.number*item.price)}</div>
               </div>
@@ -217,11 +216,27 @@ class CheckoutList extends HTMLElement {
          const quantity_selector = listItem.querySelector('quantity-selector');
          const checkbox_area = listItem.querySelector('.item_orderNumber');
          const checkbox = checkbox_area.querySelector('input[type="checkbox"]');
-        
+         const item_container_img = listItem.querySelector('.item_container_img');
+
+
+
         if (this.isItemChecked(item.id)) {
           item_container.classList.add('item_checked');
           checkbox.checked = true;
         }
+
+        item_container_img.addEventListener('click',(e)=> {
+          e.stopPropagation();
+          if (checkbox.checked) { 
+            //checkbox.checked = false; 
+            this.removeItemFromCheckedList(item.id);     
+          } 
+          else {
+            //checkbox.checked=true;
+            this.addItemToCheckedList(item.id);               
+          }        
+          this.updateList();
+        })
 
         checkbox.addEventListener('click',(e)=> {   
           e.stopPropagation();
@@ -437,20 +452,37 @@ class CheckoutList extends HTMLElement {
     }
     
     removeItemFromCheckedList(itemId) {      
-     // console.log(this.checkedItems);
+     // console.log(this.checkedItems);     
       const item = this.checkedItems.find(item => item.id === itemId);
      // console.log(item);
       if (item) {
           this.checkedItems = this.checkedItems.filter(obj => obj.id != itemId);
       }       
+
+      const selectAllOnOff_span=this.shadowRoot.querySelector('.selectAllOnOff_span');
+
+      if (this.checkedItems.length ===0) 
+      {        
+        selectAllOnOff_span.innerText = "Chọn hết";       
+      } 
+
       //console.log(this.checkedItems);
     }
 
     addItemToCheckedList(itemId) {
+    
       const item = this.selectedItems.find(item => item.id === itemId);
       if (item) {
         this.checkedItems.push({ ...item, number: 1 });
-      }         
+      }    
+
+      const selectAllOnOff_span=this.shadowRoot.querySelector('.selectAllOnOff_span');
+      console.log(this.selectedItems.length);
+      console.log(this.checkedItems.length);
+      if (this.selectedItems.length == this.checkedItems.length) 
+      {        
+        selectAllOnOff_span.innerText = "Bỏ chọn hết";      
+      } 
     }
 
     updateNumberofItem(itemId,value) {
@@ -537,7 +569,7 @@ class CheckoutList extends HTMLElement {
       const checklist_Total=this.shadowRoot.querySelector('.checklist_Total');
       checklist_Total.innerHTML=this.addDotToNumber(total);
       const checklist_Title=this.shadowRoot.querySelector('.checklist_Title');
-      checklist_Title.innerHTML=`Tổng cộng: ${this.selectedItems.length} loại`;
+      checklist_Title.innerHTML=`Danh sách có ${this.selectedItems.length} món`;
 
       return total;
     } 
