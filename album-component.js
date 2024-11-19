@@ -159,10 +159,11 @@ class PhotoAlbum extends HTMLElement {
             top: 10px;
             border: none;
             z-index: 5;
-            opacity:0.9;
             padding: 2px 2px 2px 2px;
             background-color: rgba(200, 200, 200, 0.9);
-            font-size: 22px;
+            font-size: 16px;
+            opacity: 0.7;
+            border-radius: 5px;
           }
 
             .itemInfo {   
@@ -216,8 +217,7 @@ class PhotoAlbum extends HTMLElement {
           }
           .quantity-selector input {        
             text-align: center;
-            height: 20px;
-            flex: flex-grow;
+            height: 20px;         
 
           }
           .quantity-selector button {
@@ -228,13 +228,12 @@ class PhotoAlbum extends HTMLElement {
           .hidden {
             display:none;
           }
-
         </style>          
   
         <div class="container">
           <div class="filter-bar">
                 <sl-select class="filter-item" size="small" id="category-select">
-                    <sl-option value="">All Categories</sl-option>
+                    <sl-option value="">Tất cả danh mục</sl-option>
                 </sl-select>                      
                 <sl-input class="filter-item" size="small" type="text" id="search-input" placeholder="Search by name or description"></sl-input>        
           </div>

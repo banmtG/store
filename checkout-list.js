@@ -71,7 +71,7 @@ class CheckoutList extends HTMLElement {
       this.shadowRoot.innerHTML = `${this.componentCSS}${this.CSSJSlibraries}
         <div class="container">
           <div class="header">
-           <span class="checklist_Title">Danh sách có ${this.selectedItems.length} món</span>           
+           <span class="checklist_Title">Thực đơn: ${this.selectedItems.length} món</span>           
            <div class="checklist_Total">${this.addDotToNumber(this.total)}</div>           
           </div>
           <div class="item_list"></div>
@@ -567,7 +567,7 @@ class CheckoutList extends HTMLElement {
       const checklist_Total=this.shadowRoot.querySelector('.checklist_Total');
       checklist_Total.innerHTML=this.addDotToNumber(total);
       const checklist_Title=this.shadowRoot.querySelector('.checklist_Title');
-      checklist_Title.innerHTML=`Danh sách có ${this.selectedItems.length} món`;
+      checklist_Title.innerHTML=`Thực đơn: ${this.selectedItems.length} món`;
 
       return total;
     } 
