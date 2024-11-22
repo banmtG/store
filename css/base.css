@@ -201,7 +201,6 @@ checkout-list:not([ready]) {
   display: none;
 }
 
-contact-form:not(:defined),
-contact-form:not([ready]) {
+contact-form:not(:defined) {
   display: none;
 }
