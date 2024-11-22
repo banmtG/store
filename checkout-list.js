@@ -98,7 +98,7 @@ class CheckoutList extends HTMLElement {
     render() {
       // MAIN HTML SKELETON OF THE COMPONENT
       this.shadowRoot.innerHTML = `${this.componentCSS}${this.CSSJSlibraries}
-        <div class="container">
+        <div class="container" tabindex="0" role="dialog" aria-modal="true">
           <div class="header">
            <span class="checklist_Title">Thực đơn: ${this.selectedItems.length} món</span>           
            <div class="checklist_Total">${this.addDotToNumber(this.total)}</div>           

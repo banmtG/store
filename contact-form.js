@@ -104,39 +104,41 @@ class ContactForm extends HTMLElement {
     render() {
       // MAIN HTML SKELETON OF THE COMPONENT
       this.shadowRoot.innerHTML = `${this.componentCSS}${this.CSSJSlibraries}
-        <div class="container">
+        <div class="container" tabindex="0" role="dialog" aria-modal="true">
           <div class="header">
            <span class="contact_form_title">Thông tin đơn hàng</span>
           </div>
           <div class="contact_info">
 
-            <sl-input label="Tên đầy đủ" type="text" size="small" value="${this.contactData.name || ""}"></sl-input>
-            <sl-input label="Số điện thoại" type="tel" autocomplete="off" size="small" value="${this.contactData.tel || ""}" ></sl-input>            
-            <sl-input label="Email" name="Email" autocomplete="off" type="email" size="small" value="${this.contactData.email || ""}" ></sl-input>
-            <sl-input label="Ngày dự kiến giao hàng" size="small" 
+            <input label="Tên đầy đủ" type="text" size="small" value="${this.contactData.name || ""}"></sl-input>
+            <input label="Số điện thoại" type="tel" autocomplete="off" size="small" value="${this.contactData.tel || ""}" ></sl-input>            
+            <input label="Email" name="Email" autocomplete="off" type="email" size="small" value="${this.contactData.email || ""}" ></sl-input>
+            <input label="Ngày dự kiến giao hàng" size="small" 
                 type="datetime-local"
                 id="deliver_time"
                 name="deliver_time"
                 value="${this.contactData.time}"
                 min="${this.MinTime}" max="${this.MaxTime}"
-                help-text="Giao sớm nhất là 24h và trễ nhât là 10 ngày tính từ thời điểm đặt hàng">
-                clearable
-            </sl-input>
+                help-text="Giao sớm nhất là 24h và trễ nhât là 10 ngày tính từ thời điểm đặt hàng">                
+            </input>
              
-            <sl-input label="Địa chỉ giao hàng" size="small" value="${this.contactData.address || ""}"></sl-input>    
+            <input label="Địa chỉ giao hàng" size="small" value="${this.contactData.address || ""}"></input>    
           </div>          
           <div class="footer">
-            <sl-button class='sendRequest'>Gửi yêu cầu
+            <button class='sendRequest'>Gửi yêu cầu
               <sl-icon slot="suffix" name="box-arrow-right"></sl-icon>
-            </sl-button>
-            <sl-button class='backBtn'>Quay về
+            </button>
+            <button class='backBtn'>Quay về
                 <sl-icon slot="prefix" name="box-arrow-left"></sl-icon>
-            </sl-button>
+            </button>
 
         
           </div>
         </div>
         `;
+
+        this.focusFirstElement();
+        this.shadowRoot.addEventListener("keydown", this.trapFocus.bind(this));
 
         const backBtn=this.shadowRoot.querySelector('.backBtn');
 
@@ -151,11 +153,11 @@ class ContactForm extends HTMLElement {
       const contact_info=this.shadowRoot.querySelector('.contact_info');
       const footer=this.shadowRoot.querySelector('.footer');
 
-      const name = this.shadowRoot.querySelector('sl-input[label="Tên đầy đủ"]');
-      const tel = this.shadowRoot.querySelector('sl-input[label="Số điện thoại"]');
-      const email = this.shadowRoot.querySelector('sl-input[label="Email"]');
+      const name = this.shadowRoot.querySelector('input[label="Tên đầy đủ"]');
+      const tel = this.shadowRoot.querySelector('input[label="Số điện thoại"]');
+      const email = this.shadowRoot.querySelector('input[label="Email"]');
       const deliver_time = this.shadowRoot.querySelector('#deliver_time');
-      const address = this.shadowRoot.querySelector('sl-input[label="Địa chỉ giao hàng"]');
+      const address = this.shadowRoot.querySelector('input[label="Địa chỉ giao hàng"]');
             
 
       //console.log(deliver_time.shadowRoot.querySelector('label'));
@@ -267,6 +269,55 @@ class ContactForm extends HTMLElement {
 
     }
       
+    focusFirstElement() {
+      const focusableElements = this.getFocusableElements();
+      console.log(focusableElements);
+      if (focusableElements.length > 0) {
+        console.log(focusableElements[0]);
+        focusableElements[0].focus();
+        
+        focusableElements[0].classList.add('buttonfocused');
+      }
+    }
+  
+    getFocusableElements() {
+      return Array.from(
+        this.shadowRoot.querySelectorAll("button, input, textarea, select, a[href]")
+      ).filter((el) => !el.hasAttribute("disabled"));
+    }
+  
+    trapFocus(event) {
+      const focusableElements = this.getFocusableElements();
+      console.log(focusableElements);
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+  
+  
+      if (event.key === "Escape") {
+        this._resolveDialog(false);
+      }
+  
+      if (event.key === "Tab") {
+        for (const item of focusableElements) {
+          item.classList.remove('buttonfocused');
+        }
+  
+        if (event.shiftKey) {
+          // Shift + Tab navigation
+          if (this.shadowRoot.activeElement === firstElement) {
+            event.preventDefault();
+            lastElement.focus();
+          }
+        } else {
+          // Regular Tab navigation
+          if (this.shadowRoot.activeElement === lastElement) {
+            event.preventDefault();
+            firstElement.focus();
+          }
+        }
+      }
+    }
+
     // fireChangeEvent() {
     //   const event = new CustomEvent('contact_form_Changed', {
     //       detail: { selectedItems: this.selectedItems,
@@ -322,7 +373,7 @@ class ContactForm extends HTMLElement {
     }
 
     checkNameInput(allowEmpty=true) {      
-      const name = this.shadowRoot.querySelector('sl-input[label="Tên đầy đủ"]');          
+      const name = this.shadowRoot.querySelector('input[label="Tên đầy đủ"]');          
            this.contactData.name = name.value;
       if (allowEmpty===false&&this.contactData.name==="") {
         this.notify("Name cannot be blank!", "warning", "exclamation-triangle" );
@@ -335,7 +386,7 @@ class ContactForm extends HTMLElement {
     }
 
     checkAddressInput(allowEmpty=true) {      
-      const address = this.shadowRoot.querySelector('sl-input[label="Địa chỉ giao hàng"]');  
+      const address = this.shadowRoot.querySelector('input[label="Địa chỉ giao hàng"]');  
       this.contactData.address = address.value;
       if (allowEmpty===false&&this.contactData.address==="") {
         this.notify("Address cannot be blank!", "warning", "exclamation-triangle" );
@@ -349,7 +400,7 @@ class ContactForm extends HTMLElement {
     }
 
     checkEmailInput(allowEmpty=true) {        
-        const email = this.shadowRoot.querySelector('sl-input[label="Email"]');
+        const email = this.shadowRoot.querySelector('input[label="Email"]');
         this.contactData.email = email.value;
         if (allowEmpty===false&&this.contactData.email==="") {
           this.notify("Email cannot be blank!", "warning", "exclamation-triangle" );
@@ -371,7 +422,7 @@ class ContactForm extends HTMLElement {
 
     checkTelInput(allowEmpty=true) {        
       //console.log(`checked phone`);
-        const tel = this.shadowRoot.querySelector('sl-input[label="Số điện thoại"]');
+        const tel = this.shadowRoot.querySelector('input[label="Số điện thoại"]');
         this.contactData.tel = tel.value;
         if (allowEmpty===false&&this.contactData.tel==="") {
           this.notify("Tel cannot be blank!", "warning", "exclamation-triangle" );
@@ -398,7 +449,7 @@ class ContactForm extends HTMLElement {
     isVietnamesePhoneNumber(input_number) {
         const number = this.validateAndCleanPhoneNumber(input_number);
         if (number === null) return false;
-        const tel = this.shadowRoot.querySelector('sl-input[label="Số điện thoại"]');
+        const tel = this.shadowRoot.querySelector('input[label="Số điện thoại"]');
 
         tel.value = number;
         const noSpaceNumber = this.removeAlltSpaces(number);
