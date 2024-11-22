@@ -194,3 +194,18 @@ body.ready {
     opacity: 1;
     transition: 0.25s opacity;
 }
+
+album-component:not(:defined),
+album-component:not([ready]) {
+  display: none;
+}
+
+checkout-list:not(:defined),
+checkout-list:not([ready]) {
+  display: none;
+}
+
+contact-form:not(:defined),
+contact-form:not([ready]) {
+  display: none;
+}

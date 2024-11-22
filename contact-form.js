@@ -26,6 +26,7 @@ class ContactForm extends HTMLElement {
     
     connectedCallback() {
       this.render(); // setup all HTML and CSS skeleton of the Component
+      this._initializeComponent();
     }    
 
 // SETUP OPTIONS FOR THE COMPONENT AND SAVE TO COMPONENT PROPERTIES IN CONSTRUCTOR AREA ////////////////
@@ -33,6 +34,33 @@ class ContactForm extends HTMLElement {
       return ['style','data']; 
     }
 
+    async _initializeComponent() {
+      try {
+        // Example: Wait for DOM readiness and data fetch
+        await Promise.all([this._waitForDomReady()]);
+        this.setAttribute("ready", ""); 
+      } catch (error) {
+        console.error("Component initialization failed:", error);
+      }
+    }
+
+    _waitForDomReady() {
+      return new Promise((resolve) => {
+        if (this.shadowRoot) {
+          const observer = new MutationObserver((mutations, observer) => {
+            const content = this.shadowRoot.querySelector(".container");
+            if (content) {
+              observer.disconnect();
+              resolve();
+            }
+          });
+  
+          observer.observe(this.shadowRoot, { childList: true, subtree: true });
+        } else {
+          resolve();
+        }
+      });
+    }
 
     attributeChangedCallback(name, oldValue, newValue) {
         if (name === 'style') this.changeCssStyle(newValue);   
