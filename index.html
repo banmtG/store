@@ -14,7 +14,12 @@
   <title>Jolie catering</title>
   <!-- <script type="text/javascript" src="./album.js"></script> -->
   <script type="text/javascript" src="./album-component.js"></script>
+  <script type="text/javascript" src="./contact-form.js"></script>
   <script type="text/javascript" src="./states.js"></script>
+  <script type="text/javascript" src="./localStorage.js"></script>
+  <script type="text/javascript" src="./AppController.js"></script>
+  <script type="text/javascript" src="./captcha-component.js"></script>
+
   <script>
     function sortArrayByKey(arr, key, isNumeric = false) {
   return arr.sort((a, b) => {
@@ -43,103 +48,111 @@
     <div>
         <h2>Jolie catering VT</h2>
     </div>
-  
-    <span class="totalPrice"></span>
+
     <sl-button id="view-cart" variant="default" size="small">
         <sl-icon name="cart3"></sl-icon> 
     </sl-button>   
     <div class="totalItem hidden"></div>
 
-    <!-- <sl-button  class="filter-item" id="clear-selection" variant="default" size="small">
-        <sl-icon slot="suffix" name="arrow-counterclockwise"></sl-icon>
-        Clear
-    </sl-button>     -->
-</div>
- <div class="album_container">
-  <photo-album></photo-album>
-</div> 
-<div class="page_footer">
-    <sl-button variant="text" size="small">
-        <sl-icon slot="prefix" name="c-circle"></sl-icon>
-        Jolie catering
-    </sl-button>  
-</div>
+    </div>
+    <div class="album_container">
+    <photo-album></photo-album>
+    </div> 
+    <div class="page_footer">
+        <sl-button variant="text" size="medium">
+            <sl-icon slot="prefix" name="c-circle"></sl-icon>
+            Jolie catering
+        </sl-button>  
+          
+     <span class="totalPrice"></span>
+    </div>
   <script>
-
-
 
     const loadingFetch_icon = `<loading-icon class="loading-icon" index1000 loadingstyle="2arcs" scale="2" maincolor="#1c4c5b" opacityvalue="90%"></loading-icon>`;
     const totalPrice = document.querySelector('.totalPrice');
     const totalItem = document.querySelector('.totalItem');
     const view_cart = document.querySelector('#view-cart');
 
-
-    view_cart.addEventListener('click', () => {
-        const view_cart_Popup = document.createElement('div');
-        view_cart_Popup.classList.add('view_cart_Popup');
-        view_cart_Popup.innerHTML = `<div class="checkout_container"><checkout-list></checkout-list></div>`;
-        // `<checkout-list data=${checkoutItems}></checkout-list>`;
+    // view_cart.addEventListener('click', () => {
+    //     const view_cart_Popup = document.createElement('div');
+    //     view_cart_Popup.classList.add('view_cart_Popup');
+    //     view_cart_Popup.innerHTML = `<div class="checkout_container"><checkout-list></checkout-list></div>`;
        
-        document.body.appendChild(view_cart_Popup);
+    //     document.body.appendChild(view_cart_Popup);
 
-        const checkout_list = document.querySelector('checkout-list');
+    //     const checkout_list = document.querySelector('checkout-list');
 
-        checkout_list.addEventListener('removeCheckout',(e)=> {
-            view_cart_Popup.remove();  
-            album.setSelectedItems = JSON.parse(localStorage.getItem("selectedItems")).selectedItems;
+    //     checkout_list.addEventListener('removeCheckout',(e)=> {
+    //         view_cart_Popup.remove();  
+    //        // album.setSelectedItems = JSON.parse(localStorage.getItem("selectedItems")).selectedItems;
+    //     });
+    // });
 
-        });
+    // view_cart.addEventListener('click', () => {
+    //     const view_cart_Popup = document.createElement('div');
+    //     view_cart_Popup.classList.add('view_cart_Popup');
+    //     view_cart_Popup.innerHTML = `<div class="checkout_container"><checkout-list></checkout-list></div>`;
+    //     // `<checkout-list data=${checkoutItems}></checkout-list>`;
+       
+    //     document.body.appendChild(view_cart_Popup);
+
+    //     const checkout_list = document.querySelector('checkout-list');
+
+    //     checkout_list.addEventListener('removeCheckout',(e)=> {
+    //         view_cart_Popup.remove();  
+    //         album.setSelectedItems = JSON.parse(localStorage.getItem("selectedItems")).selectedItems;
+    //     });
 
 
-        view_cart_Popup.addEventListener('click',(e)=> {
-            e.stopPropagation();   
-            if (e.target === checkout_list) return;
+    //     view_cart_Popup.addEventListener('click',(e)=> {
+    //         e.stopPropagation();   
+    //         if (e.target === checkout_list) return;
                     
-            view_cart_Popup.remove();  
+    //         view_cart_Popup.remove();  
             
-            // redraw album based on the checkout List 
-            album.setSelectedItems = JSON.parse(localStorage.getItem("selectedItems")).selectedItems;
-        })
+    //         // redraw album based on the checkout List 
+    //         album.setSelectedItems = JSON.parse(localStorage.getItem("selectedItems")).selectedItems;
+    //     })
 
         
 
-        const localStorageObject= JSON.parse(localStorage.getItem("selectedItems"));
-        checkout_list.items = localStorageObject;
+    //     const localStorageObject= JSON.parse(localStorage.getItem("selectedItems"));
+    //     checkout_list.items = localStorageObject;
 
-        checkout_list.addEventListener('itemSelected', (e) => {
-            if (e.detail.total==0) totalItem.classList.add('hidden');
-            if (e.detail.total>0) {
-                totalItem.classList.remove('hidden');
-                checkoutItems = e.detail.selectedItems;
-        }
-            totalPrice.innerHTML = addDotToNumber(e.detail.total);
-            totalItem.innerHTML = e.detail.selectedItems.length;
+    //     checkout_list.addEventListener('itemSelected', (e) => {
+    //         if (e.detail.total==0) totalItem.classList.add('hidden');
+    //         if (e.detail.total>0) {
+    //             totalItem.classList.remove('hidden');
+    //             checkoutItems = e.detail.selectedItems;
+    //     }
+    //         totalPrice.innerHTML = addDotToNumber(e.detail.total);
+    //         totalItem.innerHTML = e.detail.selectedItems.length;
       
-            localStorage.setItem("selectedItems", JSON.stringify(e.detail)); 
-        });
+    //         localStorage.setItem("selectedItems", JSON.stringify(e.detail)); 
+    //     });
 
         
 
 
-    });
+    // });
        
     //console.log(view_cart);
 
   // Example usage:
     const album = document.querySelector('photo-album');
   
-    album.addEventListener('itemSelected', (e) => {
-        if (e.detail.total==0) totalItem.classList.add('hidden');
-        if (e.detail.total>0) {
-            totalItem.classList.remove('hidden');
-            checkoutItems = e.detail.selectedItems;
-        }
-        totalPrice.innerHTML = addDotToNumber(e.detail.total);
-        totalItem.innerHTML = e.detail.selectedItems.length;
+    // album.addEventListener('itemSelected', (e) => {
+    //     if (e.detail.total==0) totalItem.classList.add('hidden');
+    //     if (e.detail.total>0) {
+    //         totalItem.classList.remove('hidden');
+    //         checkoutItems = e.detail.selectedItems;
+    //     }
+    //     totalPrice.innerHTML = addDotToNumber(e.detail.total);
+    //     totalItem.innerHTML = e.detail.selectedItems.length;
 
-        localStorage.setItem("selectedItems", JSON.stringify(e.detail)); 
+    //     localStorage.setItem("selectedItems", JSON.stringify(e.detail)); 
 
-    });  
+    // });  
   
     async function fetchImages() {
       try {
@@ -222,6 +235,7 @@
         //   imageItem.appendChild(imgElement);
         //   imageGrid.appendChild(imageItem);
         // });
+        
         document.querySelector('.loading-icon').remove();
       } catch (error) {
         console.error('Error fetching image data:', error);
@@ -261,7 +275,8 @@
                 url: `https://lh3.googleusercontent.com/d/${img[i].id}`
             })
         }
-
+        // `https://drive.google.com/a/domain.com/thumbnail?id=${img[i].id}&sz=w1024`
+        // `https://lh3.googleusercontent.com/d/${img[i].id}&sz=w1024`
        // console.log(imgCodeArray);
         let uniqueCode = [...new Set(imgCodeArray)];
 
@@ -316,7 +331,7 @@
     }
 
   </script>
-
+  <script type="text/javascript" src="./index.js"></script>
 <!-- <div class="hidden">
     <sl-button>Click me</sl-button>
     <i class="fa-solid fa-minus"> </i>

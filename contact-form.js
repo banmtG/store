@@ -38,7 +38,8 @@ class ContactForm extends HTMLElement {
     attributeChangedCallback(name, oldValue, newValue) {
         if (name === 'style') this.changeCssStyle(newValue);   
         if (name === 'contact_data') {
-          this.contactData = newValue;          
+          this.contactData = newValue;     
+        //  console.log(this.contactData);     
           this.updateForm();  
         }
     }
@@ -54,11 +55,9 @@ class ContactForm extends HTMLElement {
       this._oData = data; // underscore for private denotes
       this.contactData = data; // setup initial filter data the same as whole set.
       //just render parts of the component that is data-dependent
-      this.render();      
-      this.validateMinMax(this.contactData.time);
-      this.checkEmailInput();
-      this.checkTelInput();  
-    
+      this.render();   
+      console.log(this.contactData);   
+      this.checkAllInput();
     }
 
     get contact_data() {
@@ -100,20 +99,24 @@ class ContactForm extends HTMLElement {
             <sl-input label="Địa chỉ giao hàng" size="small" value="${this.contactData.address || ""}"></sl-input>    
           </div>          
           <div class="footer">
-            <sl-button class='back'>Quay về
-                <sl-icon slot="prefix" name="box-arrow-left"></sl-icon>
-            </sl-button>
-
             <sl-button class='sendRequest'>Gửi yêu cầu
               <sl-icon slot="suffix" name="box-arrow-right"></sl-icon>
             </sl-button>
+            <sl-button class='backBtn'>Quay về
+                <sl-icon slot="prefix" name="box-arrow-left"></sl-icon>
+            </sl-button>
+
+        
           </div>
         </div>
         `;
 
+        const backBtn=this.shadowRoot.querySelector('.backBtn');
 
-        
-   
+        backBtn.addEventListener('click', () => {
+          this.fireRemoveEvent();
+        });
+
 
       // DECLARE DIVs inside the component skeleton for later use
       const container=this.shadowRoot.querySelector('.container');
@@ -137,31 +140,38 @@ class ContactForm extends HTMLElement {
 
       name.addEventListener('blur', ()=> {
         this.contactData.name = name.value;
-        console.log(this.contactData);
-        //this.fireChangeEvent();
+        //console.log(this.contactData);
+        this.checkNameInput();  
+        this.fireChangeEvent();
       })
 
       tel.addEventListener('blur', ()=> {
-        this.checkTelInput();          
+        this.checkTelInput();     
+        this.fireChangeEvent();     
       })
 
       email.addEventListener('blur', ()=> {
         this.checkEmailInput();
+        this.fireChangeEvent();
       })
 
       address.addEventListener('blur', ()=> {
         this.contactData.address = address.value;
-        console.log(this.contactData);
-      //  this.fireChangeEvent();
+        //console.log(this.contactData);
+        this.checkAddressInput();  
+        this.fireChangeEvent();
       })
 
+      
 
 
       const sendRequest=this.shadowRoot.querySelector('.sendRequest');
       sendRequest.addEventListener('click', () => {
-        console.log(this.validateEmail(email.value));
-        tooltip.open = !tooltip.open;
-        console.log(this.isVietnamesePhoneNumber(this.removeAlltSpaces(phone.value)));        
+          if (this.checkAllInput()) this.fireProceedEvent();
+        //console.log(this.validateEmail(email.value));
+        // tooltip.open = !tooltip.open;
+        //console.log(this.isVietnamesePhoneNumber(this.removeAlltSpaces(phone.value)));    
+            
       })
 
       
@@ -169,11 +179,13 @@ class ContactForm extends HTMLElement {
         this.validateMinMax(deliver_time.value);
         // console.log(deliver_time.value);
         // console.log(new Date(deliver_time.value).getTime());
+        this.fireChangeEvent();
       });
       
       deliver_time.addEventListener('keyup',(e)=> {
         if (e.key === 'Enter' || e.keyCode === 13) {
-       this.validateMinMax(deliver_time.value);    
+       this.validateMinMax(deliver_time.value);   
+       this.fireChangeEvent(); 
         }        
       }); 
 
@@ -228,36 +240,124 @@ class ContactForm extends HTMLElement {
 
     }
       
-    fireChangeEvent() {
-      const event = new CustomEvent('itemSelected', {
-          detail: { selectedItems: this.selectedItems,
-              total: this.calculateAndUpdateTotal(),
-           }
+    // fireChangeEvent() {
+    //   const event = new CustomEvent('contact_form_Changed', {
+    //       detail: { selectedItems: this.selectedItems,
+    //           total: this.calculateAndUpdateTotal(),
+    //        }
+    //       });
+    //   this.dispatchEvent(event);
+    // }
+
+    fireRemoveEvent() {
+      console.log(`fireRemoveEvent`);
+      const event = new CustomEvent('removeContactForm', {
+          detail: { contact: this.contactData
+           },
+           bubbles:true,
+           composed:true,           
           });
       this.dispatchEvent(event);
     }
 
-    checkEmailInput() {        
+    fireProceedEvent() {
+      console.log(`proceedContactForm`);
+      const event = new CustomEvent('proceedContactForm', {
+          detail: { contactData: {
+                                  name: this.contactData.name,
+                                  tel: this.removeAlltSpaces(this.contactData.tel),
+                                  email: this.contactData.email,
+                                  time: this.DeliverTime,
+                                  address: this.contactData.address,
+                                } 
+          },
+           bubbles:true,
+           composed:true,           
+          });
+      this.dispatchEvent(event);
+    }
+
+    
+    checkAllInput() {
+      console.log(`checkAllInput`);
+      if (!this.checkNameInput(false)) return false;
+      if (!this.checkTelInput(false)) return false;
+      console.log(`checkTelInput true`);
+      if (!this.checkEmailInput(false)) return false;
+      console.log(`checkEmailInput true`);
+
+      const deliver_time = this.shadowRoot.querySelector('#deliver_time'); 
+
+      if (!this.validateMinMax(deliver_time.value)) return false;
+      console.log(`validateMinMax true`);
+      if (!this.checkAddressInput(false)) return false;
+      return true;
+    }
+
+    checkNameInput(allowEmpty=true) {      
+      const name = this.shadowRoot.querySelector('sl-input[label="Tên đầy đủ"]');          
+           this.contactData.name = name.value;
+      if (allowEmpty===false&&this.contactData.name==="") {
+        this.notify("Name cannot be blank!", "warning", "exclamation-triangle" );
+        name.classList.add('glowing');      
+        return false;
+      } else {
+        name.classList.remove('glowing');      
+        return true;    
+      }   
+    }
+
+    checkAddressInput(allowEmpty=true) {      
+      const address = this.shadowRoot.querySelector('sl-input[label="Địa chỉ giao hàng"]');  
+      this.contactData.address = address.value;
+      if (allowEmpty===false&&this.contactData.address==="") {
+        this.notify("Address cannot be blank!", "warning", "exclamation-triangle" );
+        address.classList.add('glowing');      
+        return false;
+      } else {
+        address.classList.remove('glowing');      
+        return true;    
+      }
+   
+    }
+
+    checkEmailInput(allowEmpty=true) {        
         const email = this.shadowRoot.querySelector('sl-input[label="Email"]');
         this.contactData.email = email.value;
+        if (allowEmpty===false&&this.contactData.email==="") {
+          this.notify("Email cannot be blank!", "warning", "exclamation-triangle" );
+            email.classList.add('glowing');      
+          return false;
+        }
         //console.log(this.contactData);
         if (!this.validateEmail(email.value) && email.value!="") {
             this.notify("Incorrect email format!", "warning", "exclamation-triangle" );
-            email.classList.add('glowing');            
+            email.classList.add('glowing');      
+            return false;      
         } else {
             email.classList.remove('glowing');
+            return true;
            // this.fireChangeEvent();
         }  
+     
     }
 
-    checkTelInput() {        
+    checkTelInput(allowEmpty=true) {        
+      //console.log(`checked phone`);
         const tel = this.shadowRoot.querySelector('sl-input[label="Số điện thoại"]');
         this.contactData.tel = tel.value;
+        if (allowEmpty===false&&this.contactData.tel==="") {
+          this.notify("Tel cannot be blank!", "warning", "exclamation-triangle" );
+            email.classList.add('glowing');      
+          return false;
+        }
         if (!this.isVietnamesePhoneNumber(tel.value) && tel.value!="") {
             this.notify("Incorrect phone format!", "warning", "exclamation-triangle" );
             tel.classList.add('glowing');
+            return false;
         } else {
             tel.classList.remove('glowing');
+            return true;
         }  
     }
 
@@ -268,9 +368,15 @@ class ContactForm extends HTMLElement {
         return emailRegex.test(email);
       }
 
-    isVietnamesePhoneNumber(number) {
+    isVietnamesePhoneNumber(input_number) {
+        const number = this.validateAndCleanPhoneNumber(input_number);
+        if (number === null) return false;
+        const tel = this.shadowRoot.querySelector('sl-input[label="Số điện thoại"]');
+
+        tel.value = number;
         const noSpaceNumber = this.removeAlltSpaces(number);
-        return /(?:\+84|0084|0)[235789][0-9]{1,2}[0-9]{7}(?:[^\d]+|$)/g.test(noSpaceNumber);
+
+        return /(?:\+84|0084|0)[235789][0-9]{1,2}[0-9]{7}(?:[^\d]+|$)/g.test(noSpaceNumber);         
     }
 
     replaceSpacewithEmdash(str) {
@@ -311,22 +417,57 @@ class ContactForm extends HTMLElement {
     }
 
     validateMinMax(value) {
+      console.log(`vao validateMinMax`);
         const deliver_time = this.shadowRoot.querySelector('#deliver_time');
-        console.log(value);
+        console.log(deliver_time.value);
+
+        const newMinTime =  this.toLocalISOTime(2);
         const number = new Date(value).getTime();
-        const Min = new Date(this.DeliverTime).getTime();
+        const Min = new Date(newMinTime).getTime();
         const Max = new Date(this.MaxTime).getTime();
+               
+    
+        if (value===undefined) {
+          this.notify("Nhập lại thời gian giao hàng mong muốn!", "warning", "exclamation-triangle" );
+          deliver_time.classList.add('glowing');
+          return false;
+        }
+
         console.log(number);
         if (number<Min || value=="") {        
             deliver_time.classList.add('glowing'); 
             console.log(deliver_time.classList);
-            this.notify("Yêu cầu giao hàng quá sớm!", "warning", "exclamation-triangle" );
            
+
+            this.notify("Yêu cầu giao hàng quá sớm!", "warning", "exclamation-triangle" );
+            setTimeout(()=>{deliver_time.value =  this.toLocalISOTime(3);
+              deliver_time.classList.add('glowing_green'); 
+            },3000)
+            setTimeout(() => {
+              deliver_time.classList.remove('glowing');
+              deliver_time.classList.remove('glowing_green'); 
+            }, 4000);
+
+            return false;
         } else if (number>Max) {
             this.notify("Yêu cầu giao hàng quá xa trong tương lai!", "warning", "exclamation-triangle" );
+
             deliver_time.classList.add('glowing');
+            setTimeout(()=>{
+              deliver_time.value = this.toLocalISOTime(10);          
+              deliver_time.classList.add('glowing_green'); 
+            },3000)
+            setTimeout(() => {
+              deliver_time.classList.remove('glowing');
+              deliver_time.classList.remove('glowing_green'); 
+            }, 4000); 
             console.log(deliver_time.classList);
-        } else deliver_time.classList.remove('glowing');
+            return false;
+        } else {
+          deliver_time.classList.remove('glowing');
+          this.DeliverTime = value;
+          return true;
+        }
 
     }
    
@@ -358,18 +499,49 @@ class ContactForm extends HTMLElement {
     }
 
     fireChangeEvent() {
-        const event = new CustomEvent('contactUpdated', {
-            detail: { contactData: {
-                                    name: this.contactData.name,
+      console.log(this.DeliverTime);
+        const event = new CustomEvent('contact_form_Changed', {
+            detail: { contactData: {name: this.contactData.name,
                                     tel: this.removeAlltSpaces(this.contactData.tel),
                                     email: this.contactData.email,
                                     time: this.DeliverTime,
                                     address: this.contactData.address,
                                     } 
-                    }
+                    },
+            bubbles:true,
+            composed:true,
+                  
         });
         this.dispatchEvent(event);
       }
+
+    validateAndCleanPhoneNumber(input) {
+        if (typeof input !== "string") {
+            console.error("Input must be a string.");
+            return null;
+        }
+    
+        // Remove spaces and non-numeric characters except '+' at the start
+        let cleanedInput = input.replace(/\s+/g, "").replace(/[^\d+]/g, "");
+    
+        // If the cleaned input starts with "+84"
+        if (cleanedInput.startsWith("+84")) {
+            cleanedInput = cleanedInput.replace("+84", "84"); // Remove the '+' for validation
+            if (cleanedInput.length === 11) {
+                return "+84" + cleanedInput.slice(2); // Restore '+84'
+            }
+        }
+    
+        // If the cleaned input starts with "0"
+        if (cleanedInput.startsWith("0")) {
+            if (cleanedInput.length === 10) {
+                return cleanedInput; // Valid phone number
+            }
+        }
+    
+        // Invalid phone number
+        return null;
+    }
 
   }
 

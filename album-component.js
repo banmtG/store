@@ -179,7 +179,8 @@ class PhotoAlbum extends HTMLElement {
 
             .itemInfo_Name {
                 padding: 5px 10px 0px 10px;
-                font-size: 0.9rem;
+                font-size: 1rem;
+                line-height:1.1rem;
                 text-align: left;
                 overflow: hidden;       
                 max-height:35px;
@@ -187,7 +188,7 @@ class PhotoAlbum extends HTMLElement {
             }
 
             .itemInfo_Price {
-                padding: 5px 10px 5px 10px;
+                padding: 2px 10px 2px 10px;
                 font-size: 1.1rem;
                 color: red;
                 text-align: left;
@@ -235,7 +236,7 @@ class PhotoAlbum extends HTMLElement {
                 <sl-select class="filter-item" size="small" id="category-select">
                     <sl-option value="">Tất cả danh mục</sl-option>
                 </sl-select>                      
-                <sl-input class="filter-item" size="small" type="text" id="search-input" placeholder="Search by name or description"></sl-input>        
+                <sl-input class="filter-item" size="small" type="text" id="search-input" placeholder="Tìm kiếm"></sl-input>        
           </div>
           <div class="album-grid"></div>
         </div>

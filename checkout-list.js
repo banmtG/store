@@ -21,6 +21,11 @@ class CheckoutList extends HTMLElement {
     
     connectedCallback() {
       this.render(); // setup all HTML and CSS skeleton of the Component
+      //document.addEventListener('emitCartChange',this.handleCartChage(this));
+    }
+
+    handleCartChage(e) {
+      //console.log(e);
     }
 
 // SETUP OPTIONS FOR THE COMPONENT AND SAVE TO COMPONENT PROPERTIES IN CONSTRUCTOR AREA ////////////////
@@ -97,6 +102,7 @@ class CheckoutList extends HTMLElement {
       const item_list=this.shadowRoot.querySelector('.item_list');
       const footer=this.shadowRoot.querySelector('.footer');
       const backBtn=this.shadowRoot.querySelector('.backBtn');
+      const nextBtn=this.shadowRoot.querySelector('.nextBtn');
       const selectAllOnOff=this.shadowRoot.querySelector('.selectAllOnOff');
       const selectAllOnOff_span=this.shadowRoot.querySelector('.selectAllOnOff_span');
 
@@ -105,6 +111,12 @@ class CheckoutList extends HTMLElement {
       backBtn.addEventListener('click', () => {
         this.fireRemoveEvent();
       });
+
+      nextBtn.addEventListener('click', () => {
+        this.fireNextStepEvent();
+      });
+
+
 
 
       selectAllOnOff.addEventListener('click', () => {   
@@ -281,6 +293,7 @@ class CheckoutList extends HTMLElement {
            if (this.isItemChecked(item.id) && this.checkedItems.length>1) {
             this.handleQuantityChangeGroup(item.id,e.detail.value);
            } else { // neu nam rieng 1 minh
+           // console.log(' // neu nam rieng 1 minh');
             this.handleQuantityChangeOne(item.id,e.detail.value);
            }
              
@@ -418,7 +431,7 @@ class CheckoutList extends HTMLElement {
     }
 
     handleQuantityChangeOne(itemId,value) {
-      console.log(`vao handleQuantityChangeOne`);
+      //console.log(`vao handleQuantityChangeOne`);
       if (value==0) { // neu bang 0
         //console.log('vao 0');
         let item_Name = `${this.getItemObject(itemId).name} (${this.getItemObject(itemId).unit})`;
@@ -429,11 +442,13 @@ class CheckoutList extends HTMLElement {
               this.removeItemFromCheckedList(itemId); 
               this.updateList();
               this.fireChangeEvent(); 
+             // console.log(`  this.fireChangeEvent(); 1 `);
           } else {
             console.log('vao update 1 cho 1 item');
             this.updateNumberofItem(itemId,1);   
             this.updateList();
             this.fireChangeEvent(); 
+           // console.log(`  this.fireChangeEvent(); 2 `);
           }
         });  
       } else {
@@ -441,6 +456,7 @@ class CheckoutList extends HTMLElement {
       this.updateItemQuantity(itemId,value);   
       this.updateList();
       this.fireChangeEvent(); 
+      //console.log(`  this.fireChangeEvent(); 3 `);
       }
     }
 
@@ -536,14 +552,18 @@ class CheckoutList extends HTMLElement {
       if (selectedItem) {
         selectedItem.number = parseInt(quantity);
       }
-      this.fireChangeEvent();
+      //this.fireChangeEvent();
     }
 
     fireChangeEvent() {
-      const event = new CustomEvent('itemSelected', {
+     // console.log(`fireChangeEvent`);
+      const event = new CustomEvent('checkout_listChanged', {
           detail: { selectedItems: this.selectedItems,
               total: this.calculateAndUpdateTotal(),
-           }
+              
+           },
+          bubbles: true, // Allow bubbling to the document 
+          composed: true // Allow crossing Shadow DOM boundaries 
           });
       this.dispatchEvent(event);
       if (this.selectedItems.length==0) this.fireRemoveEvent();
@@ -554,6 +574,17 @@ class CheckoutList extends HTMLElement {
           detail: { selectedItems: this.selectedItems,
               total: this.calculateAndUpdateTotal(),
            }
+          });
+      this.dispatchEvent(event);
+    }
+
+    fireNextStepEvent() {
+      const event = new CustomEvent('checkout_fireNextStepEvent', {
+          detail: { selectedItems: this.selectedItems,
+              total: this.calculateAndUpdateTotal(),
+           },
+           bubbles: true,
+           composed: true,               
           });
       this.dispatchEvent(event);
     }
