@@ -22,11 +22,48 @@ class ContactForm extends HTMLElement {
         time:this.DeliverTime,
         address:"",
       };
-
+      this.isReady = false;
     }
+
+  async _initializeComponent() {
+    try {
+      // Example: Wait for DOM readiness and data fetch
+      await Promise.all([this._waitForDomReady(), this._fetchData()]);
+      this._finalizeSetup();
+    } catch (error) {
+      console.error("Component initialization failed:", error);
+    }
+  }
+
+  // Wait until shadow DOM and children are ready
+  _waitForDomReady() {
+    return new Promise((resolve) => {
+      if (this.shadowRoot) {
+        const observer = new MutationObserver((mutations, observer) => {
+          const content = this.shadowRoot.querySelector(".container");
+          if (content) {
+            observer.disconnect();
+            resolve();
+          }
+        });
+
+        observer.observe(this.shadowRoot, { childList: true, subtree: true });
+      } else {
+        resolve();
+      }
+    });
+  }
+
+  // Finalize setup and mark as ready
+  _finalizeSetup() {
+    this.isReady = true; // Mark the component as ready
+    this.setAttribute("ready", ""); // Add the ready attribute
+    console.log("Component setup complete.");
+  }
     
     connectedCallback() {
       this.render(); // setup all HTML and CSS skeleton of the Component
+      this._initializeComponent();
     }    
 
 // SETUP OPTIONS FOR THE COMPONENT AND SAVE TO COMPONENT PROPERTIES IN CONSTRUCTOR AREA ////////////////
@@ -41,6 +78,9 @@ class ContactForm extends HTMLElement {
           this.contactData = newValue;     
         //  console.log(this.contactData);     
           this.updateForm();  
+        }
+        if (name === "ready" && newValue !== null) {
+          console.log("Component is now ready.");
         }
     }
 

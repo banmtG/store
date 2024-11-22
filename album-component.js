@@ -180,10 +180,10 @@ class PhotoAlbum extends HTMLElement {
             .itemInfo_Name {
                 padding: 5px 10px 0px 10px;
                 font-size: 1rem;
-                line-height:1.1rem;
+                line-height:1rem;
                 text-align: left;
                 overflow: hidden;       
-                max-height:35px;
+                max-height:2rem;
   
             }
 

@@ -85,7 +85,7 @@ function handleInitContactForm() {
 function handleSendForm() {
     const capt_Popup = document.createElement('div');
     capt_Popup.classList.add('captcha_Popup');
-    capt_Popup.innerHTML = `<div class="captcha-Popup_container"><captcha-component></captcha-component></div>`;
+    capt_Popup.innerHTML = `<captcha-component></captcha-component>`;
     
     document.body.appendChild(capt_Popup);
 
@@ -94,7 +94,17 @@ function handleSendForm() {
 
     capt.addEventListener('captchaVerified', (e)=> {
         console.log('verified', e.detail);
-        setTimeout(()=>capt_Popup.remove(),2000)        
+        setTimeout(()=>{
+            capt_Popup.remove();
+
+        },2000)        
+    })
+
+    capt_Popup.addEventListener('click',(e)=> {
+        console.log(e.target);
+        e.stopPropagation();   
+        if (e.target === capt) return;                
+        capt_Popup.remove();  
     })
 }
 

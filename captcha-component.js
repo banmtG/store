@@ -2,14 +2,14 @@
     constructor() {
       super();
       this.attachShadow({ mode: "open" });
-      this.url='https://script.google.com/macros/s/AKfycbzDbE8GjTsH4Mu6euzndMRI-bNnUGceeHHfAGX41RFCqftwd7XSEuIlu9y2MF-VeU_1Ag/exec?action=generate&s=2.5';
+      this.url='https://script.google.com/macros/s/AKfycbzDbE8GjTsH4Mu6euzndMRI-bNnUGceeHHfAGX41RFCqftwd7XSEuIlu9y2MF-VeU_1Ag/exec?action=generate&s=3';
       this.componentCSS = `<link rel="stylesheet" href="./captcha-component.css" />`;
     }
   
     connectedCallback() {
       // HTML content with iframe embedded
       this.shadowRoot.innerHTML = `${this.componentCSS}
-      <loading-icon class="loading-icon" index1000 loadingstyle="roller" scale="1" maincolor="#1c4c5b" opacityvalue="90%"></loading-icon>  
+      <loading-icon class="loading-icon" index1000 loadingstyle="roller" scale="0.5" maincolor="#1c4c5b" opacityvalue="90%"></loading-icon>  
       <iframe id="captchaIframe" src="${this.url}"  class="responsive-iframe"></iframe>
       `;
 

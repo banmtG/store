@@ -120,8 +120,8 @@
 .item_info span {
     width:95%;
     font-size: 0.9rem;
-    max-height: 2.3rem;
-    line-height: 1.1rem;
+    max-height: 2rem;
+    line-height: 0.9rem;
     opacity: 0.9;
 }
 

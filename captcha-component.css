@@ -6,9 +6,10 @@
 }
 
 .responsive-iframe {
-    border: 1px solid #ccc;    
-    height: 165px;
-    width: 255px;
+    border: 1px solid #ccc;  
+    border-radius: 5px;  
+    height: 188px;
+    width: 303px;
     overflow: hidden;
     background-color: white;
 }

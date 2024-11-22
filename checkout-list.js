@@ -17,17 +17,13 @@ class CheckoutList extends HTMLElement {
       this.CSSJSlibraries = ``;
       // this.CSSJSlibraries =` <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.17.1/cdn/themes/light.css" />
       // <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.17.1/cdn/shoelace-autoloader.js"></script>`;
-    }
+     }
     
     connectedCallback() {
       this.render(); // setup all HTML and CSS skeleton of the Component
-      //document.addEventListener('emitCartChange',this.handleCartChage(this));
     }
-
-    handleCartChage(e) {
-      //console.log(e);
-    }
-
+  
+    
 // SETUP OPTIONS FOR THE COMPONENT AND SAVE TO COMPONENT PROPERTIES IN CONSTRUCTOR AREA ////////////////
     static get observedAttributes() {
       return ['style','data']; 
@@ -69,7 +65,7 @@ class CheckoutList extends HTMLElement {
     get getSelectedItems() {
         return this.selectedItems || [];
     }
-
+   
 // FUNCTION METHODS OF THE COMPONENT /////////////////////////////////////////////////////////
     render() {
       // MAIN HTML SKELETON OF THE COMPONENT
