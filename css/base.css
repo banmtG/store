@@ -29,6 +29,10 @@ html {
 
 body {
     position:relative;
+    display:flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height:100vh;
 }
 
 body::-webkit-scrollbar {
@@ -55,6 +59,24 @@ html, body {
     justify-content: right;
     align-items: center;
     z-index: 1;
+    height:50px;
+    overflow:hidden;
+}
+
+.album_container {
+    height: calc(100% - 75px);
+    border:1px solid #ccc;
+    overflow:hidden;
+}
+
+.page_footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 25px;
+    color: white;
+    background-color:#AAB7B8;
+    overflow:hidden;
 }
 
 .top_line  div:first-child {
@@ -96,10 +118,6 @@ html, body {
     color: #2E4053;
 }
 
-.album_container {
-    height: calc(100vh - 80px);
-    border:1px solid #ccc;
-}
 
 .view_cart_Popup {
     position: fixed;
@@ -116,53 +134,7 @@ html, body {
     z-index: 100;
 }
 
-.contact_Form_Popup {
-    position: fixed;
-    top:0px;
-    left:0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height:100vh;
-    width:100vw;
-    background-color: rgba(0, 0, 0, 0.5);
-    font-family: var(--sl-font-sans);
-    z-index: 100;
-}
 
-.captcha_Popup {
-    position: fixed;
-    top:0px;
-    left:0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height:100vh;
-    width:100vw;
-    background-color: rgba(0, 0, 0, 0.5);
-    font-family: var(--sl-font-sans);
-    z-index: 100;
-}
-
-.checkout_container {
-    width:90%;
-    height:100vh;
-    max-width: 500px;                 
-    max-height: 70vh;
-}
-
-.page_footer {
-    position:sticky;
-    bottom:0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 35px;
-    color: white;
-    background-color:#AAB7B8;
-}
 
 .image-grid {
   display: flex;
@@ -203,4 +175,42 @@ checkout-list:not([ready]) {
 
 contact-form:not(:defined) {
   display: none;
+}
+
+
+.contact_Form_Popup {
+    position: fixed;
+    top:0px;
+    left:0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height:100vh;
+    width:100vw;
+    background-color: rgba(0, 0, 0, 0.5);
+    font-family: var(--sl-font-sans);
+    z-index: 100;
+}
+
+.captcha_Popup {
+    position: fixed;
+    top:0px;
+    left:0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height:100vh;
+    width:100vw;
+    background-color: rgba(0, 0, 0, 0.5);
+    font-family: var(--sl-font-sans);
+    z-index: 100;
+}
+
+.checkout_container {
+    width:90%;
+    height:100vh;
+    max-width: 500px;                 
+    max-height: 70vh;
 }
