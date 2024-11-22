@@ -51,59 +51,15 @@ class QuantitySelector extends HTMLElement {
       </style>`
       this.CSSJSlibraries =` <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.17.1/cdn/themes/light.css" />
       <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.17.1/cdn/shoelace-autoloader.js"></script>`;
-      this.isReady = false;
+ 
     }
 
     connectedCallback() {
       this.render(); // setup all HTML and CSS skeleton of the Component
-      this._initializeComponent();
+      
     }
 
-    async _initializeComponent() {
-      try {
-        // Example: Wait for DOM readiness and data fetch
-        await Promise.all([this._waitForDomReady(), this._fetchData()]);
-        this._finalizeSetup();
-      } catch (error) {
-        console.error("Component initialization failed:", error);
-      }
-    }
-  
-    // Wait until shadow DOM and children are ready
-    _waitForDomReady() {
-      return new Promise((resolve) => {
-        if (this.shadowRoot) {
-          const observer = new MutationObserver((mutations, observer) => {
-            const content = this.shadowRoot.querySelector(".container");
-            if (content) {
-              observer.disconnect();
-              resolve();
-            }
-          });
-  
-          observer.observe(this.shadowRoot, { childList: true, subtree: true });
-        } else {
-          resolve();
-        }
-      });
-    }
-  
-    // Simulate data fetching
-    _fetchData() {
-      return new Promise((resolve) => {
-        // Replace this with actual data fetching logic
-        console.log("Fetching data...");
-        setTimeout(() => resolve("Data loaded"), 0);
-      });
-    }
-  
-    // Finalize setup and mark as ready
-    _finalizeSetup() {
-      this.isReady = true; // Mark the component as ready
-      this.setAttribute("ready", ""); // Add the ready attribute
-      console.log("Component setup complete.");
-    }
-
+   
 // SETUP OPTIONS FOR THE COMPONENT AND SAVE TO COMPONENT PROPERTIES IN CONSTRUCTOR AREA ////////////////
     static get observedAttributes() {
       return ['style',`min`,`max`,`value`]; 
@@ -117,10 +73,7 @@ class QuantitySelector extends HTMLElement {
           this.number = parseInt(newValue);
           this.oldValue = parseInt(newValue);
           this.render();
-        }
-        if (name === "ready" && newValue !== null) {
-          console.log("Component is now ready.");
-        }
+        }       
     }
 
     changeCssStyle(style) {

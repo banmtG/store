@@ -21,49 +21,11 @@ class ContactForm extends HTMLElement {
         email: "",
         time:this.DeliverTime,
         address:"",
-      };
-      this.isReady = false;
+      };      
     }
-
-  async _initializeComponent() {
-    try {
-      // Example: Wait for DOM readiness and data fetch
-      await Promise.all([this._waitForDomReady(), this._fetchData()]);
-      this._finalizeSetup();
-    } catch (error) {
-      console.error("Component initialization failed:", error);
-    }
-  }
-
-  // Wait until shadow DOM and children are ready
-  _waitForDomReady() {
-    return new Promise((resolve) => {
-      if (this.shadowRoot) {
-        const observer = new MutationObserver((mutations, observer) => {
-          const content = this.shadowRoot.querySelector(".container");
-          if (content) {
-            observer.disconnect();
-            resolve();
-          }
-        });
-
-        observer.observe(this.shadowRoot, { childList: true, subtree: true });
-      } else {
-        resolve();
-      }
-    });
-  }
-
-  // Finalize setup and mark as ready
-  _finalizeSetup() {
-    this.isReady = true; // Mark the component as ready
-    this.setAttribute("ready", ""); // Add the ready attribute
-    console.log("Component setup complete.");
-  }
     
     connectedCallback() {
       this.render(); // setup all HTML and CSS skeleton of the Component
-      this._initializeComponent();
     }    
 
 // SETUP OPTIONS FOR THE COMPONENT AND SAVE TO COMPONENT PROPERTIES IN CONSTRUCTOR AREA ////////////////
@@ -78,10 +40,7 @@ class ContactForm extends HTMLElement {
           this.contactData = newValue;     
         //  console.log(this.contactData);     
           this.updateForm();  
-        }
-        if (name === "ready" && newValue !== null) {
-          console.log("Component is now ready.");
-        }
+        }        
     }
 
     changeCssStyle(style) {
@@ -124,8 +83,8 @@ class ContactForm extends HTMLElement {
           <div class="contact_info">
 
             <sl-input label="Tên đầy đủ" type="text" size="small" value="${this.contactData.name || ""}"></sl-input>
-            <sl-input label="Số điện thoại" type="tel" size="small" value="${this.contactData.tel || ""}" ></sl-input>            
-            <sl-input label="Email" name="Email" type="email" size="small" value="${this.contactData.email || ""}" ></sl-input>
+            <sl-input label="Số điện thoại" type="tel" autocomplete="off" size="small" value="${this.contactData.tel || ""}" ></sl-input>            
+            <sl-input label="Email" name="Email" autocomplete="off" type="email" size="small" value="${this.contactData.email || ""}" ></sl-input>
             <sl-input label="Ngày dự kiến giao hàng" size="small" 
                 type="datetime-local"
                 id="deliver_time"
