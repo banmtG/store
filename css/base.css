@@ -80,7 +80,6 @@ html, body {
 }
 
 .totalItem {
-
     display: flex;
     justify-content: center;
     align-items: center;
@@ -149,16 +148,18 @@ html, body {
 
 .checkout_container {
     width:90%;
-    height:auto;
+    height:100vh;
     max-width: 500px;                 
     max-height: 70vh;
 }
 
 .page_footer {
+    position:sticky;
+    bottom:0;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 30px;
+    height: 35px;
     color: white;
     background-color:#AAB7B8;
 }
@@ -193,11 +194,6 @@ html, body {
 body.ready {
     opacity: 1;
     transition: 0.25s opacity;
-}
-
-album-component:not(:defined),
-album-component:not([ready]) {
-  display: none;
 }
 
 checkout-list:not(:defined),
