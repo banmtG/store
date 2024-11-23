@@ -109,9 +109,9 @@ class ContactForm extends HTMLElement {
            <span class="contact_form_title">Thông tin đơn hàng</span>
           </div>
           <div class="contact_info">      
-            <input label="Tên đầy đủ" placeholder="Tên đầy đủ" size="small" value="${this.contactData.name || ""}">
-            <input label="Số điện thoại" placeholder="Số điện thoại" type="tel" size="small" value="${this.contactData.tel || ""}" >        
-            <input label="Email" placeholder="Email" type="Email" size="small" value="${this.contactData.email || ""}" >
+            <input name="${this.generateRandomString(15)}" label="Tên đầy đủ" placeholder="Tên đầy đủ" size="small" value="${this.contactData.name || ""}" onfocus="if (this.hasAttribute('readonly')) {this.removeAttribute('readonly');this.blur();this.focus();}" />
+            <input name="${this.generateRandomString(15)}" label="Số điện thoại" placeholder="Số điện thoại" type="tel" size="small" value="${this.contactData.tel || ""}" onfocus="if (this.hasAttribute('readonly')) {this.removeAttribute('readonly');this.blur();this.focus();}" />     
+            <input name="${this.generateRandomString(15)}" label="Email" placeholder="Email" type="Email" size="small" value="${this.contactData.email || ""}" onfocus="if (this.hasAttribute('readonly')) {this.removeAttribute('readonly');this.blur();this.focus();}" />
             <input label="Địa chỉ giao hàng" placeholder="Địa chỉ nhận hàng" size="small" value="${this.contactData.address || ""}">
             <div class="input_extra">
               <span class="input_name">Ngày dự kiến giao hàng</span>            
@@ -542,6 +542,15 @@ class ContactForm extends HTMLElement {
         });
         this.dispatchEvent(event);
       }
+
+    generateRandomString(length) {
+      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-@#$%&()~";
+      let result = "";
+      for (let i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return result;
+    }
 
     validateAndCleanPhoneNumber(input) {
         if (typeof input !== "string") {
