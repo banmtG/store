@@ -105,13 +105,16 @@ class ContactForm extends HTMLElement {
       // MAIN HTML SKELETON OF THE COMPONENT
       this.shadowRoot.innerHTML = `${this.componentCSS}${this.CSSJSlibraries}
         <div class="container" tabindex="0" role="dialog" aria-modal="true">
+
+          <form name="myForm">
           <div class="header">
            <span class="contact_form_title">Thông tin đơn hàng</span>
           </div>
           <div class="contact_info">
-            <input name="i_name" label="Tên đầy đủ" type="text" autocomplete="off" placeholder="Tên đầy đủ" size="small" value="${this.contactData.name || ""}">
-            <input label="Số điện thoại"  placeholder="Số điện thoại" type="tel" autocomplete="off" size="small" value="${this.contactData.tel || ""}" >        
-            <input label="Email" placeholder="Email" name="Email" autocomplete="off" type="email" size="small" value="${this.contactData.email || ""}" >
+      
+            <input name="i_name" label="Tên đầy đủ" placeholder="Tên đầy đủ" size="small" value="${this.contactData.name || ""}">
+            <input label="Số điện thoại" placeholder="Số điện thoại" type="tel" size="small" value="${this.contactData.tel || ""}" >        
+            <input label="Email" placeholder="Email" name="Email" size="small" value="${this.contactData.email || ""}" >
             <input label="Địa chỉ giao hàng" placeholder="Địa chỉ nhận hàng" size="small" value="${this.contactData.address || ""}">
             <div class="input_extra">
               <span class="input_name">Ngày dự kiến giao hàng</span>            
@@ -134,6 +137,7 @@ class ContactForm extends HTMLElement {
                  <sl-icon slot="prefix" name="backspace"></sl-icon><span>Quay về</span>
             </button>
           </div>
+          </form>
         </div>
         `;
 
@@ -472,11 +476,11 @@ class ContactForm extends HTMLElement {
             this.notify("Yêu cầu giao hàng quá sớm!", "warning", "exclamation-triangle" );
             setTimeout(()=>{deliver_time.value =  this.toLocalISOTime(3);
               deliver_time.classList.add('glowing_green'); 
-            },3000)
+            },2000)
             setTimeout(() => {
               deliver_time.classList.remove('glowing');
               deliver_time.classList.remove('glowing_green'); 
-            }, 4000);
+            }, 3000);
 
             return false;
         } else if (number>Max) {
@@ -486,11 +490,11 @@ class ContactForm extends HTMLElement {
             setTimeout(()=>{
               deliver_time.value = this.toLocalISOTime(10);          
               deliver_time.classList.add('glowing_green'); 
-            },3000)
+            },2000)
             setTimeout(() => {
               deliver_time.classList.remove('glowing');
               deliver_time.classList.remove('glowing_green'); 
-            }, 4000); 
+            }, 3000); 
             console.log(deliver_time.classList);
             return false;
         } else {
@@ -512,7 +516,7 @@ class ContactForm extends HTMLElement {
   
     // Custom function to emit toast notifications
 
-    notify(message, variant = 'primary', icon = 'info-circle', duration = 4000) {
+    notify(message, variant = 'primary', icon = 'info-circle', duration = 2000) {
       const alert = Object.assign(document.createElement('sl-alert'), {
         variant,
         closable: true,

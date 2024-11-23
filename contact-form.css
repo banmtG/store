@@ -95,10 +95,15 @@ input {
 }
 
 .input_extra {
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap:4px;
   color: rgba(0,0,75,0.5);
+}
+
+.input_extra > input {
+
 }
 
 .input_extra .input_name{
