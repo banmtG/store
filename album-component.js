@@ -178,12 +178,12 @@ class PhotoAlbum extends HTMLElement {
             }
 
             .itemInfo_Name {
-                padding: 5px 10px 0px 10px;
+                padding: 5px 10px 2px 10px;
                 font-size: 1rem;
                 line-height:1rem;
                 text-align: left;
                 overflow: hidden;       
-                max-height:2rem;
+                max-height:2.1rem;
   
             }
 
