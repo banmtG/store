@@ -101,7 +101,7 @@ class PhotoAlbum extends HTMLElement {
             max-width:45vw;
           }
 
-          #search-input::part(form-control) {
+          #search-input {
             max-width:45vw;
             min-width:130px;
           }
@@ -236,7 +236,7 @@ class PhotoAlbum extends HTMLElement {
                 <sl-select class="filter-item" size="small" id="category-select">
                     <sl-option value="">Tất cả danh mục</sl-option>
                 </sl-select>                      
-                 <input id="search-input" class="filter-item" label="Tìm kiếm" placeholder="Tìm kiếm" onfocus="if (this.hasAttribute('readonly')) {this.removeAttribute('readonly');this.blur();this.focus();}" />
+                 <input id="search-input" class="filter-item" label="Tìm kiếm" placeholder="Tìm kiếm" onfocus="if (this.hasAttribute('readonly')) {this.removeAttribute('readonly');this.blur();this.focus();}" readonly />
               
           </div>
           <div class="album-grid"></div>

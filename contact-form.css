@@ -103,7 +103,7 @@ input {
 }
 
 .input_extra > input {
-  width:calc(100% - 11px);
+  width:calc(100% - 12px);
 }
 
 .input_extra .input_name {
