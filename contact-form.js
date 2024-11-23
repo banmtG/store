@@ -109,9 +109,9 @@ class ContactForm extends HTMLElement {
            <span class="contact_form_title">Thông tin đơn hàng</span>
           </div>
           <div class="contact_info">      
-            <input name="i_name" label="Tên đầy đủ" placeholder="Tên đầy đủ" size="small" value="${this.contactData.name || ""}">
+            <input label="Tên đầy đủ" placeholder="Tên đầy đủ" size="small" value="${this.contactData.name || ""}">
             <input label="Số điện thoại" placeholder="Số điện thoại" type="tel" size="small" value="${this.contactData.tel || ""}" >        
-            <input label="Email" placeholder="Email" name="Email" size="small" value="${this.contactData.email || ""}" >
+            <input label="Email" placeholder="Email" type="Email" size="small" value="${this.contactData.email || ""}" >
             <input label="Địa chỉ giao hàng" placeholder="Địa chỉ nhận hàng" size="small" value="${this.contactData.address || ""}">
             <div class="input_extra">
               <span class="input_name">Ngày dự kiến giao hàng</span>            
