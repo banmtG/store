@@ -16,27 +16,28 @@
       justify-content: center;
       align-items:center;
       opacity: 0.8;
+
   }
   
   .contact_form_title {
-      font-size:1.2rem;
-      font-weight:600; 
+      font-size:1.3rem;
+      font-weight: bold;
   }
 
   .contact_info {
-    padding: 15px;
+    padding: 15px 15px 5px 15px;
     display: flex;
     flex-direction: column;
-    gap: 1px;
+    gap: 15px;
   }  
 
-  .glowing::part(base) {
+  .glowing {
     outline: none;
     border-color: red;
     box-shadow: 0px 0px 5px red; 
   }
 
-  .glowing_green::part(base) {
+  .glowing_green {
     outline: none;
     border-color: green;
     box-shadow: 0px 0px 5px green; 
@@ -52,7 +53,7 @@
   .footer {
       display:flex;
       opacity: 0.9;
-      padding:15px;
+      padding:10px 15px;
       flex-direction: row-reverse;
       justify-content: space-between;
       align-items:center;
@@ -66,4 +67,47 @@
   :not(:defined) {
     visibility: hidden;
   }
+
+  button {
+    border-radius: 5px;
+    display:flex;
+    justify-content: space-evenly;
+    gap: 5px;
+    align-items: center;
+    background: #FFFFFF; 
+    color: rgba(0,0,75,0.8);
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    cursor: pointer;    
+    font-size: 0.7rem;
+  }
+
+  .buttonfocused {
+    outline: 2px solid blue;
+  }
   
+input {
+  font-size:1rem;
+  border: 1px solid #ccc;
+  line-height:1.5rem;
+  padding:5px;
+  border-radius: 5px;
+}
+
+.input_extra {
+  display: flex;
+  flex-direction: column;
+  gap:4px;
+  color: rgba(0,0,75,0.5);
+}
+
+.input_extra .input_name{
+  font-size:1.1rem;
+  line-height: 1.1rem;
+}
+
+.input_extra .input_helpertext{
+  font-size:0.9rem;
+  line-height: 0.9rem;
+  font-style: italic;
+}

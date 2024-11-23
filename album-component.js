@@ -236,7 +236,7 @@ class PhotoAlbum extends HTMLElement {
                 <sl-select class="filter-item" size="small" id="category-select">
                     <sl-option value="">Tất cả danh mục</sl-option>
                 </sl-select>                      
-                <sl-input class="filter-item" size="small" type="text" id="search-input" placeholder="Tìm kiếm"></sl-input>        
+                <sl-input class="filter-item" autocomplete="off" size="small" type="text" id="search-input" placeholder="Tìm kiếm"></sl-input>        
           </div>
           <div class="album-grid"></div>
         </div>

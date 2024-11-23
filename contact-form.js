@@ -84,7 +84,7 @@ class ContactForm extends HTMLElement {
       //just render parts of the component that is data-dependent
       this.render();   
       console.log(this.contactData);   
-      this.checkAllInput();
+      //this.checkAllInput();
     }
 
     get contact_data() {
@@ -109,30 +109,30 @@ class ContactForm extends HTMLElement {
            <span class="contact_form_title">Thông tin đơn hàng</span>
           </div>
           <div class="contact_info">
-
-            <input label="Tên đầy đủ" type="text" size="small" value="${this.contactData.name || ""}"></sl-input>
-            <input label="Số điện thoại" type="tel" autocomplete="off" size="small" value="${this.contactData.tel || ""}" ></sl-input>            
-            <input label="Email" name="Email" autocomplete="off" type="email" size="small" value="${this.contactData.email || ""}" ></sl-input>
-            <input label="Ngày dự kiến giao hàng" size="small" 
-                type="datetime-local"
-                id="deliver_time"
-                name="deliver_time"
-                value="${this.contactData.time}"
-                min="${this.MinTime}" max="${this.MaxTime}"
-                help-text="Giao sớm nhất là 24h và trễ nhât là 10 ngày tính từ thời điểm đặt hàng">                
-            </input>
-             
-            <input label="Địa chỉ giao hàng" size="small" value="${this.contactData.address || ""}"></input>    
-          </div>          
+            <input name="i_name" label="Tên đầy đủ" type="text" autocomplete="off" placeholder="Tên đầy đủ" size="small" value="${this.contactData.name || ""}">
+            <input label="Số điện thoại"  placeholder="Số điện thoại" type="tel" autocomplete="off" size="small" value="${this.contactData.tel || ""}" >        
+            <input label="Email" placeholder="Email" name="Email" autocomplete="off" type="email" size="small" value="${this.contactData.email || ""}" >
+            <input label="Địa chỉ giao hàng" placeholder="Địa chỉ nhận hàng" size="small" value="${this.contactData.address || ""}">
+            <div class="input_extra">
+              <span class="input_name">Ngày dự kiến giao hàng</span>            
+              <input label="Ngày dự kiến giao hàng" size="small" 
+                  placeholder="Ngày dự kiến giao hàng"
+                  type="datetime-local"
+                  id="deliver_time"
+                  name="deliver_time"
+                  value="${this.contactData.time}"
+                  min="${this.MinTime}" max="${this.MaxTime}"
+                  help-text="Giao sớm nhất là 24h và trễ nhât là 10 ngày tính từ thời điểm đặt hàng">
+              <span class="input_helpertext">Giao sớm nhất là 24h và trễ nhât là 10 ngày tính từ thời điểm đặt hàng</span>
+            </div>
+          </div>
           <div class="footer">
-            <button class='sendRequest'>Gửi yêu cầu
-              <sl-icon slot="suffix" name="box-arrow-right"></sl-icon>
+            <button class='sendRequest'><span>Gửi yêu cầu</span>
+              <sl-icon slot="suffix" name="backspace-reverse"></sl-icon>
             </button>
-            <button class='backBtn'>Quay về
-                <sl-icon slot="prefix" name="box-arrow-left"></sl-icon>
+            <button class='backBtn'>
+                 <sl-icon slot="prefix" name="backspace"></sl-icon><span>Quay về</span>
             </button>
-
-        
           </div>
         </div>
         `;
@@ -189,9 +189,7 @@ class ContactForm extends HTMLElement {
         //console.log(this.contactData);
         this.checkAddressInput();  
         this.fireChangeEvent();
-      })
-
-      
+      })     
 
 
       const sendRequest=this.shadowRoot.querySelector('.sendRequest');
@@ -217,51 +215,7 @@ class ContactForm extends HTMLElement {
        this.fireChangeEvent(); 
         }        
       }); 
-
  
-
-    //   const deliver_time = this.shadowRoot.querySelector('#deliver_time');
-    //   console.log(this.toLocalISOTime(0));
-    //   deliver_time.min=this.toLocalISOTime(0)
-    //   deliver_time.value=this.toLocalISOTime(1);
-    //   deliver_time.max=this.toLocalISOTime(30);
-    //   const minDate = this.toLocalISOTime(0);
-    // console.log(this.toLocalISOTime(1));
-    // //   deliver_time.min=minDate;
-    //    const date = new Date().getTime();
-    //    console.log(date);
-
-    //    const date1 = new Date(this.toLocalISOTime(1)).getTime();
-    //    console.log(date1);
-    //    console.log((date1-date)/60/60/1000/24);
-    //    console.log(new Date(this.toLocalISOTime(1)).getTime());
-    //    console.log(new Date().getTime());
-
-    //   deliver_time.value=this.toLocalISOTime(1);
-    //   deliver_time.max=this.toLocalISOTime(30);
-    //     // console.log(date);
-        // console.log(date.getDay());
-        // console.log(date.getDate());
-        // console.log(date.getMonth()+1);
-        // console.log(date.getFullYear());
-        // console.log(date.getHours());
-        // console.log(date.getMinutes());
-        // console.log(date.setDate(date.getDate() + 1));
-
-
-      // ADD addEventListener FOR EACH div/button declared in this skeleton.
-
-      // this.shadowRoot.querySelector('#search-input').addEventListener('sl-input', (e) => {
-      //   this.searchTerm = e.target.value;
-      //   this.updateGrid();
-      // });
-
-      // this.shadowRoot.querySelector('#category-select').addEventListener('sl-change', (e) => {
-      //   this.selectedCategory = e.target.value;
-      //   this.updateGrid();
-      // });
-
-      // CALL function(s) to change parts of the skeleton that are data-driven
     }
 
     //METHODS TO UPDATE INTERFACE PARTS (EACH METHOD FOR EACH PART)
@@ -271,12 +225,10 @@ class ContactForm extends HTMLElement {
       
     focusFirstElement() {
       const focusableElements = this.getFocusableElements();
-      console.log(focusableElements);
+
       if (focusableElements.length > 0) {
         console.log(focusableElements[0]);
-        focusableElements[0].focus();
-        
-        focusableElements[0].classList.add('buttonfocused');
+        focusableElements[0].focus();      
       }
     }
   
@@ -288,13 +240,13 @@ class ContactForm extends HTMLElement {
   
     trapFocus(event) {
       const focusableElements = this.getFocusableElements();
-      console.log(focusableElements);
+
       const firstElement = focusableElements[0];
       const lastElement = focusableElements[focusableElements.length - 1];
   
   
       if (event.key === "Escape") {
-        this._resolveDialog(false);
+        this.fireRemoveEvent();
       }
   
       if (event.key === "Tab") {
@@ -426,7 +378,7 @@ class ContactForm extends HTMLElement {
         this.contactData.tel = tel.value;
         if (allowEmpty===false&&this.contactData.tel==="") {
           this.notify("Tel cannot be blank!", "warning", "exclamation-triangle" );
-            email.classList.add('glowing');      
+          tel.classList.add('glowing');      
           return false;
         }
         if (!this.isVietnamesePhoneNumber(tel.value) && tel.value!="") {
