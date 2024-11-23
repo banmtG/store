@@ -108,8 +108,7 @@ class ContactForm extends HTMLElement {
           <div class="header">
            <span class="contact_form_title">Thông tin đơn hàng</span>
           </div>
-          <div class="contact_info">
-      
+          <div class="contact_info">      
             <input name="i_name" label="Tên đầy đủ" placeholder="Tên đầy đủ" size="small" value="${this.contactData.name || ""}">
             <input label="Số điện thoại" placeholder="Số điện thoại" type="tel" size="small" value="${this.contactData.tel || ""}" >        
             <input label="Email" placeholder="Email" name="Email" size="small" value="${this.contactData.email || ""}" >
@@ -119,10 +118,9 @@ class ContactForm extends HTMLElement {
               <input label="Ngày dự kiến giao hàng" size="small"                  
                   type="datetime-local"
                   id="deliver_time"
-                  name="deliver_time"
-                  style="width:98%"
+                  name="deliver_time"           
                   value="${this.contactData.time}"
-                  min="${this.MinTime}" max="${this.MaxTime}"                  
+                  min="${this.MinTime}" max="${this.MaxTime}">
               <span class="input_helpertext">Giao sớm nhất là 24h và trễ nhât là 10 ngày tính từ thời điểm đặt hàng</span>
             </div>
           </div>
