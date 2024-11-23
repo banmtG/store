@@ -213,7 +213,11 @@ class ContactForm extends HTMLElement {
        this.fireChangeEvent(); 
         }        
       }); 
- 
+
+      console.log(tel.getBoundingClientRect());
+      //address.value=address.calc();
+      console.log(window.getComputedStyle(tel).width);
+
     }
 
     //METHODS TO UPDATE INTERFACE PARTS (EACH METHOD FOR EACH PART)

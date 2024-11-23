@@ -236,14 +236,15 @@ class PhotoAlbum extends HTMLElement {
                 <sl-select class="filter-item" size="small" id="category-select">
                     <sl-option value="">Tất cả danh mục</sl-option>
                 </sl-select>                      
-                <sl-input class="filter-item" autocomplete="off" size="small" type="text" id="search-input" placeholder="Tìm kiếm"></sl-input>        
+                 <input id="search-input" class="filter-item" label="Tìm kiếm" placeholder="Tìm kiếm" onfocus="if (this.hasAttribute('readonly')) {this.removeAttribute('readonly');this.blur();this.focus();}" />
+              
           </div>
           <div class="album-grid"></div>
         </div>
         
       `;
 
-      this.shadowRoot.querySelector('#search-input').addEventListener('sl-input', (e) => {
+      this.shadowRoot.querySelector('#search-input').addEventListener('input', (e) => {
         this.searchTerm = e.target.value;
         this.updateGrid();
       });

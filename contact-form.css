@@ -103,10 +103,10 @@ input {
 }
 
 .input_extra > input {
-
+  width:calc(100% - 11px);
 }
 
-.input_extra .input_name{
+.input_extra .input_name {
   font-size:1.1rem;
   line-height: 1.1rem;
 }
