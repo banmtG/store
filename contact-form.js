@@ -109,9 +109,9 @@ class ContactForm extends HTMLElement {
            <span class="contact_form_title">Thông tin đơn hàng</span>
           </div>
           <div class="contact_info">      
-            <input  autocapitalize="off" autocorrect="off" autocomplete="off"  name="${this.generateRandomString(15)}" label="Tên đầy đủ" placeholder="Tên đầy đủ" size="small" value="${this.contactData.name || ""}" onfocus="if (this.hasAttribute('readonly')) {this.removeAttribute('readonly');this.blur();this.focus();}" readonly/>
-            <input  autocapitalize="off" autocorrect="off" autocomplete="off"  name="${this.generateRandomString(15)}" label="Số điện thoại" placeholder="Số điện thoại" type="tel" size="small" value="${this.contactData.tel || ""}" onfocus="if (this.hasAttribute('readonly')) {this.removeAttribute('readonly');this.blur();this.focus();}" readonly/>     
-            <input  autocapitalize="off" autocorrect="off" autocomplete="off"  name="${this.generateRandomString(15)}" label="Email" placeholder="Email" type="Email" size="small" value="${this.contactData.email || ""}" onfocus="if (this.hasAttribute('readonly')) {this.removeAttribute('readonly');this.blur();this.focus();}" readonly/>
+            <textarea rows="1" name="${this.generateRandomString(15)}" label="Tên đầy đủ" placeholder="Tên đầy đủ" size="small" value="${this.contactData.name || ""}" >${this.contactData.name || ""}</textarea>
+            <input  autocapitalize="off" autocorrect="off" autocomplete="off"  name="${this.generateRandomString(15)}" label="Số điện thoại" placeholder="Số điện thoại" type="tel" size="small" value="${this.contactData.tel || ""}"/>     
+            <input  autocapitalize="off" autocorrect="off" autocomplete="off"  name="${this.generateRandomString(15)}" label="Email" placeholder="Email" type="Email" size="small" value="${this.contactData.email || ""}" />
             <input label="Địa chỉ giao hàng" placeholder="Địa chỉ nhận hàng" size="small" value="${this.contactData.address || ""}">
             <div class="input_extra">
               <span class="input_name">Ngày dự kiến giao hàng</span>            
@@ -151,7 +151,7 @@ class ContactForm extends HTMLElement {
       const contact_info=this.shadowRoot.querySelector('.contact_info');
       const footer=this.shadowRoot.querySelector('.footer');
 
-      const name = this.shadowRoot.querySelector('input[label="Tên đầy đủ"]');
+      const name = this.shadowRoot.querySelector('textarea[label="Tên đầy đủ"]');
       const tel = this.shadowRoot.querySelector('input[label="Số điện thoại"]');
       const email = this.shadowRoot.querySelector('input[label="Email"]');
       const deliver_time = this.shadowRoot.querySelector('#deliver_time');
@@ -286,8 +286,9 @@ class ContactForm extends HTMLElement {
            bubbles:true,
            composed:true,           
           });
-      this.dispatchEvent(event);
       this.fireChangeEvent();
+      this.dispatchEvent(event);
+    
     }
 
     fireProceedEvent() {
@@ -326,7 +327,7 @@ class ContactForm extends HTMLElement {
     }
 
     checkNameInput(allowEmpty=true) {      
-      const name = this.shadowRoot.querySelector('input[label="Tên đầy đủ"]');          
+      const name = this.shadowRoot.querySelector('textarea[label="Tên đầy đủ"]');          
            this.contactData.name = name.value;
       if (allowEmpty===false&&this.contactData.name==="") {
         this.notify("Name cannot be blank!", "warning", "exclamation-triangle" );

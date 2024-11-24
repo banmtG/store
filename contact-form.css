@@ -116,3 +116,12 @@ input {
   line-height: 0.9rem;
   font-style: italic;
 }
+
+textarea {
+  font-size:1rem;
+  border: 1px solid #ccc;
+  line-height:1.5rem;
+  padding:5px;
+  border-radius: 5px;
+  resize:none;
+}
