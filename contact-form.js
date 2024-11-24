@@ -109,9 +109,9 @@ class ContactForm extends HTMLElement {
            <span class="contact_form_title">Thông tin đơn hàng</span>
           </div>
           <div class="contact_info">      
-            <input name="${this.generateRandomString(15)}" label="Tên đầy đủ" placeholder="Tên đầy đủ" size="small" value="${this.contactData.name || ""}" onfocus="if (this.hasAttribute('readonly')) {this.removeAttribute('readonly');this.blur();this.focus();}" readonly/>
-            <input name="${this.generateRandomString(15)}" label="Số điện thoại" placeholder="Số điện thoại" type="tel" size="small" value="${this.contactData.tel || ""}" onfocus="if (this.hasAttribute('readonly')) {this.removeAttribute('readonly');this.blur();this.focus();}" readonly/>     
-            <input name="${this.generateRandomString(15)}" label="Email" placeholder="Email" type="Email" size="small" value="${this.contactData.email || ""}" onfocus="if (this.hasAttribute('readonly')) {this.removeAttribute('readonly');this.blur();this.focus();}" readonly/>
+            <input autocapitalize="none" name="${this.generateRandomString(15)}" label="Tên đầy đủ" placeholder="Tên đầy đủ" size="small" value="${this.contactData.name || ""}" onfocus="if (this.hasAttribute('readonly')) {this.removeAttribute('readonly');this.blur();this.focus();}" readonly/>
+            <input autocapitalize="none" name="${this.generateRandomString(15)}" label="Số điện thoại" placeholder="Số điện thoại" type="tel" size="small" value="${this.contactData.tel || ""}" onfocus="if (this.hasAttribute('readonly')) {this.removeAttribute('readonly');this.blur();this.focus();}" readonly/>     
+            <input autocapitalize="none" name="${this.generateRandomString(15)}" label="Email" placeholder="Email" type="Email" size="small" value="${this.contactData.email || ""}" onfocus="if (this.hasAttribute('readonly')) {this.removeAttribute('readonly');this.blur();this.focus();}" readonly/>
             <input label="Địa chỉ giao hàng" placeholder="Địa chỉ nhận hàng" size="small" value="${this.contactData.address || ""}">
             <div class="input_extra">
               <span class="input_name">Ngày dự kiến giao hàng</span>            
@@ -169,24 +169,24 @@ class ContactForm extends HTMLElement {
         this.contactData.name = name.value;
         //console.log(this.contactData);
         this.checkNameInput();  
-        this.fireChangeEvent();
+       // this.fireChangeEvent();
       })
 
       tel.addEventListener('blur', ()=> {
         this.checkTelInput();     
-        this.fireChangeEvent();     
+        //this.fireChangeEvent();     
       })
 
       email.addEventListener('blur', ()=> {
         this.checkEmailInput();
-        this.fireChangeEvent();
+      //  this.fireChangeEvent();
       })
 
       address.addEventListener('blur', ()=> {
         this.contactData.address = address.value;
         //console.log(this.contactData);
         this.checkAddressInput();  
-        this.fireChangeEvent();
+        //this.fireChangeEvent();
       })     
 
 
@@ -204,13 +204,13 @@ class ContactForm extends HTMLElement {
         this.validateMinMax(deliver_time.value);
         // console.log(deliver_time.value);
         // console.log(new Date(deliver_time.value).getTime());
-        this.fireChangeEvent();
+        //this.fireChangeEvent();
       });
       
       deliver_time.addEventListener('keyup',(e)=> {
         if (e.key === 'Enter' || e.keyCode === 13) {
        this.validateMinMax(deliver_time.value);   
-       this.fireChangeEvent(); 
+       //this.fireChangeEvent(); 
         }        
       }); 
 
@@ -287,6 +287,7 @@ class ContactForm extends HTMLElement {
            composed:true,           
           });
       this.dispatchEvent(event);
+      this.fireChangeEvent();
     }
 
     fireProceedEvent() {
@@ -304,6 +305,7 @@ class ContactForm extends HTMLElement {
            composed:true,           
           });
       this.dispatchEvent(event);
+      this.fireChangeEvent();
     }
 
     
@@ -528,7 +530,7 @@ class ContactForm extends HTMLElement {
     }
 
     fireChangeEvent() {
-      console.log(this.DeliverTime);
+      //console.log(this.DeliverTime);
         const event = new CustomEvent('contact_form_Changed', {
             detail: { contactData: {name: this.contactData.name,
                                     tel: this.removeAlltSpaces(this.contactData.tel),
