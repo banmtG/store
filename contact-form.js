@@ -109,7 +109,7 @@ class ContactForm extends HTMLElement {
            <span class="contact_form_title">Thông tin đơn hàng</span>
           </div>
           <div class="contact_info">      
-            <textarea rows="1" name="${this.generateRandomString(15)}" label="Tên đầy đủ" placeholder="Tên đầy đủ" size="small" value="${this.contactData.name || ""}" >${this.contactData.name || ""}</textarea>
+            <textarea rows="1" name="${this.generateRandomString(15)}" label="Tên đầy đủ" placeholder="Tên đầy đủ Textarea" size="small" value="${this.contactData.name || ""}" >${this.contactData.name || ""}</textarea>
             <input  autocapitalize="off" autocorrect="off" autocomplete="off"  name="${this.generateRandomString(15)}" label="Số điện thoại" placeholder="Số điện thoại" type="tel" size="small" value="${this.contactData.tel || ""}"/>     
             <input  autocapitalize="off" autocorrect="off" autocomplete="off"  name="${this.generateRandomString(15)}" label="Email" placeholder="Email" type="Email" size="small" value="${this.contactData.email || ""}" />
             <input label="Địa chỉ giao hàng" placeholder="Địa chỉ nhận hàng" size="small" value="${this.contactData.address || ""}">
