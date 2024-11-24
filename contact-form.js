@@ -105,6 +105,7 @@ class ContactForm extends HTMLElement {
       // MAIN HTML SKELETON OF THE COMPONENT
       this.shadowRoot.innerHTML = `${this.componentCSS}${this.CSSJSlibraries}
         <div class="container" tabindex="0" role="dialog" aria-modal="true">
+          <form id="contact_form">
           <div class="header">
            <span class="contact_form_title">Thông tin đơn hàng</span>
           </div>
@@ -132,8 +133,16 @@ class ContactForm extends HTMLElement {
                  <sl-icon slot="prefix" name="backspace"></sl-icon><span>Quay về</span>
             </button>
           </div>
+          </form>
         </div>
         `;
+
+        var form = this.shadowRoot.getElementById("contact_form");     
+       
+        form.addEventListener('submit', (e) => {
+            e.preventDefault(); 
+            return false;         
+        });
 
         this.focusFirstElement();
         this.shadowRoot.addEventListener("keydown", this.trapFocus.bind(this));
