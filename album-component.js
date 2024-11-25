@@ -344,6 +344,7 @@ class PhotoAlbum extends HTMLElement {
         // Info Button Click Event
         albumItem.querySelector('.info-button').addEventListener('click', (e) => {
           e.stopPropagation();  // Prevent parent click
+          this._handleMoreInfo(item.id);
           alert(`Info for ${item.name}:\n\nDescription: ${item.description}\nID: ${item.id}`);
         });
 
@@ -472,7 +473,19 @@ class PhotoAlbum extends HTMLElement {
         }
         return total;
     }
-  }
+
+    _handleMoreInfo(itemId) {
+      const item = this._getItemObject(itemId);    
+      console.log(item);  
+    }
+    
+
+
+    _getItemObject(itemId) {
+      return this.items.find(item => item.id === itemId);
+    }
+  
+}
 
   customElements.define('photo-album', PhotoAlbum);
 
