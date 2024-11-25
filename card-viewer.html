@@ -7,10 +7,10 @@
     <script type="text/javascript" src="./card-viewer.js"></script>
     <style>
       /* Disable pointer events on the main content when the overlay is active */
-      /* #main-content.dimmed {
+      .dimmed {
         pointer-events: none;
-        filter: blur(2px); /* Optional: visually indicate the inactive state
-      } */
+        /* filter: blur(2px); Optional: visually indicate the inactive state*/
+      }
 
 
       custom-overlay[hidden] {
@@ -32,14 +32,21 @@
     <script>
         // Main application logic
         const ct=document.querySelector('custom-overlay');
-        document.querySelector("#open-overlay").addEventListener("click", () => {
+        document.querySelector("#open-overlay").addEventListener("click", (e) => {
             const overlay = document.querySelector("#overlay");
-            overlay.showOverlay();
+          //  console.log(event.target );
+            overlay.showOverlay(event.target);
         });
-        const element = document.querySelectorAll('input')[2];
-        element.addEventListener('click',()=>{
-            console.log(document.activeElement);
-            overlay.showOverlay()});    
+        // const element = document.querySelectorAll('input')[2];
+        // element.addEventListener('click',()=>{
+        //     console.log(document.activeElement);
+        //     overlay.showOverlay();
+        // });    
+        // ct.addEventListener('remove_thisCustomElement', ()=>{
+        //     console.log('vao remove');
+        //     ct.remove();
+        // });
+
     </script>
   </body>
 

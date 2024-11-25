@@ -3,6 +3,7 @@
     background: white;
     padding: 1rem;
     border-radius: 8px;
+    pointer-events: all !important;
 }
 
 .overlay {
@@ -16,8 +17,11 @@
     align-items: center;
     justify-content: center;
     z-index: 1000; /* Ensure it appears on top */
+    backdrop-filter: blur(2px) !important; 
+   
 }
 
-#container {
+.clear {
+    pointer-events: all !important;
 
 }

@@ -2,8 +2,7 @@ class CustomOverlay extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: "open" });
-        this.componentCSS = `<link rel="stylesheet" href="./card-viewer.css" />`;   
-   
+        this.componentCSS = `<link rel="stylesheet" href="./card-viewer.css" />`;
     }
     
     connectedCallback() {
@@ -13,7 +12,7 @@ class CustomOverlay extends HTMLElement {
     render() {    
         this.shadowRoot.innerHTML = `${this.componentCSS}
         <div class="overlay">
-            <div tabindex="0" id="container" role="dialog" aria-modal="true">
+            <div tabindex="0" class="container" role="dialog" aria-modal="true">
 
             <input readonly><input readonly><input><input><input><input>
             <button id="close-overlay">Close</button>
@@ -22,7 +21,7 @@ class CustomOverlay extends HTMLElement {
       `;
   
       // Close button logic
-      this.shadowRoot.querySelector("#close-overlay").addEventListener("click", () => this.hideOverlay());
+      this.shadowRoot.querySelector("#close-overlay").addEventListener("click", () => this._hideOverlay());
   
       // Trap focus logic
       this._trapFocus();
@@ -37,27 +36,43 @@ class CustomOverlay extends HTMLElement {
       this._handleOverlayClick();
     }
   
-    showOverlay() {
+    showOverlay(lastElement=null) {
+     // console.log(lastElement);
+      //document.body.classList.add('dimmed');
+      this.shadowRoot.querySelector("#close-overlay").classList.add(`clear`);
       this.hidden = false;
       //document.querySelector("#main-content").classList.add("dimmed");
-      this._previouslyFocusedElement = document.activeElement;
-      console.log(this._previouslyFocusedElement);
-      this.shadowRoot.querySelector("#container").focus();
+      if (lastElement===null) {this._previouslyFocusedElement = document.activeElement;      
+      }else {
+        this._previouslyFocusedElement = lastElement;
+      }
+     // console.log(this._previouslyFocusedElement);
+      this.shadowRoot.querySelector(".container").focus();
       this._focusElement(1);
     }
 
     _handleOverlayClick () {
         const overlay = this.shadowRoot.querySelector('.overlay');
-        overlay.addEventListener('click',(e)=>{         
+        const container = this.shadowRoot.querySelector('.container');
+        overlay.addEventListener('click',(e)=>{    
             e.stopPropagation();
-            this.hideOverlay();
+            if (e.target != overlay) return;
+            this._hideOverlay();
         })
     }
   
-    hideOverlay() {
+    _hideOverlay() {
       this.hidden = true;
       //document.querySelector("#main-content").classList.remove("dimmed");
-      if (this._previouslyFocusedElement) this._previouslyFocusedElement.focus();
+      if (this._previouslyFocusedElement) {
+        console.log(this._previouslyFocusedElement);
+        this._previouslyFocusedElement.focus();
+      }
+    }
+
+    _removeOverlay () {
+        this._hideOverlay();
+        this._handleEventCreation(null,'remove_thisCustomElement');     
     }
 
     _focusElement(n) {
@@ -122,7 +137,7 @@ class CustomOverlay extends HTMLElement {
     _handleKeyInteractions() {
       document.addEventListener("keydown", (e) => {
         if (e.key === "Escape" && !this.hidden) {           
-            this.hideOverlay();
+            this._hideOverlay();
         }
       });
     }
