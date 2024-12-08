@@ -1,0 +1,261 @@
+:host {
+    border:none;
+    position:absolute;
+    top:20px;
+    width:90%;
+    height:90%;
+    color: var(--text-color-primary);
+    border: 1px solid var(--border-color-primary);
+}    
+
+.container {
+    width:100%;
+    height:100%;    
+    overflow: hidden;
+    display:flex;
+    flex-direction: column
+}
+
+.main_viewer {   
+    display:flex;
+    position:relative;
+    overflow: hidden;
+    background-color: var(--border-color-primary);
+    border-right:1px solid var(--border-color-primary)
+}
+
+.extra_viewer {    
+    display:flex;
+    flex-direction: column;
+}
+
+.controlBar {
+    height:0;
+    flex:1;
+    overflow: hidden; 
+    border-bottom:1px solid var(--border-color-primary);
+}
+
+.info {
+    height:0;
+    flex:0;
+    overflow: scroll;
+    background-color: var(--theme-color);
+}
+
+.imgContainer {
+    width:100%;
+    height:100%;
+    display:flex;
+    position:relative;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    transition: transform 0.5s ease-in-out;
+}
+
+.imgContainer_div {
+    width:100%;
+    height:100%;
+    flex-shrink: 0;
+}
+
+.imgContainer_div img{
+    width:100%;
+    height:100%;
+    object-fit: contain;
+}
+
+.closeBtn {
+    position: absolute;
+    top: 10px;
+    right: 10px; 
+    border: none;
+    cursor: pointer;
+    z-index: 5;
+    opacity:0.9;
+    border-radius: 50%;    
+    height: 40px;
+    width:40px;
+    color: #fff;
+    font-weight: bold;  
+    display:flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+.controlBtn span {
+    cursor: pointer;
+    padding: 20px 10px;
+    color: var(--text-color-secondary);
+    font-weight: bold;
+    background-color: var(--button-color-secondary);
+    opacity:0.7;
+}
+
+.controlBtn{
+    position: absolute;
+    width:1px;
+    top: 0; 
+    height: 100%;
+    font-size: 22px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+  }
+
+.leftBtn {
+    left: 20px;
+}
+
+.rightBtn {
+    right: 20px;
+  }
+
+  
+.tick {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: var(--theme-color);
+    color: var(--background-color-primary);
+    border-radius: 50%;    
+    width:40px;
+    height:40px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    font-size: 1.5rem;;
+}
+
+.tickThumbnail {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    background-color: var(--theme-color);
+    color: white;
+    border-radius: 50%;
+    font-size: 10px;
+    z-index: 100;
+    width:25px;
+    height:25px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dotControl_container {
+    position: absolute;    
+    top: calc(100% - 40px);
+    width:100%;    
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    font-size:1.2rem;
+}
+
+.dotControlFlex{
+    display: flex;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory; /* Enables snapping to items */
+    transition: all 1s ease-in-out;
+}
+
+.dot {
+    transition: all 0.5s ease-in-out;
+    flex-shrink: 0;
+    width: 10px;
+    height: 10px;
+    margin:10px;
+    background-color: white;
+    border-radius: 5px;
+    scroll-snap-align: center;
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+.dotActive {
+    -webkit-transform: scale(1.8);
+    -ms-transform: scale(1.8);
+    transform: scale(1.8);    
+}
+
+.dotSecondActive {
+    -webkit-transform: scale(1.4);
+    -ms-transform: scale(1.4);
+    transform: scale(1.4); 
+}
+
+.thumbnailControl_container {
+    color:white;
+    width:auto;
+    height:100%;
+    overflow-x: hidden;   
+    overflow-y: scroll;   
+    display:flex;
+    /*scroll-snap-type: y mandatory;   Enables snapping to items  */
+    background-color: var(--text-color-primary);
+    justify-content: flex-start;
+    align-content: flex-start;  /* Make first few rows stick to top */
+}
+
+.thumbnailControl_div {
+    flex-shrink: 0;
+    scroll-snap-align: center; 
+    border:none;
+    opacity:1;
+    filter: brightness(0.8);
+    outline: 2px solid white;
+    display:flex;
+}
+
+.thumbnailControl_div.active {
+    filter: brightness(1.1);
+    /* outline: 5px green solid;
+    z-index:100;  */
+}
+
+.highlight {
+    position:absolute;
+    bottom:6%;
+    left:0;   
+    width:100%;
+    height:10px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
+    color:white;
+}
+
+.thumbnailControl_div img {
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+
+
+
+
+.hidden {
+    display: none;
+}
+
+.noScrollBar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */ 
+}
+
+.noScrollBar::-webkit-scrollbar {
+  display: none;
+}
+
+.noUserSelect {
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+}

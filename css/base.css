@@ -1,5 +1,30 @@
 :root {
-    --theme-color: #D5D8DC;    
+
+    /* Core Theme Colors */
+    --theme-color: #4A90E2;
+    --theme-color-hover: #3A78C2;
+
+    /* Neutral Colors */
+    --background-color-primary: #FFFFFF;
+    --background-color-secondary: #F5F5F5;
+    --border-color: #E0E0E0;
+
+    /* Text Colors */
+    --text-color-primary: #333333;
+    --text-color-secondary: #888888;
+
+    /* Utility Colors */
+    --success-color: green;
+    --warning-color: #F39C12;
+    --error-color: #E74C3C;
+
+      /* Border Colors */
+    --border-color-primary: #2E4053;
+    --border-color-secondary: #BFC9CA;
+
+    /* Button Colors */
+    --button-color-primary: #2E4053;
+    --button-color-secondary: #BFC9CA;
 
     /* https://samanthadigital.com/luxury-color-palettes/ 
     Classic Elegance: #2E4053, #BFC9CA, #AAB7B8, #D5D8DC, #F1C40F 
@@ -12,6 +37,13 @@
     Earthen Luxe: #0A0908, #22333B, #EAE0D5, #C6AC8E, #5E503F 
     Noir Chic: #1E1E1E, #595959, #A6A6A6, #D0D0D0, #F1EFEF 
     Mocha Medley:#332820, #5A4D40, #D5AA9F, #D0C6BD, #EFEDEA */
+
+    --breakpoint-phone-vertical: 480px;
+    --breakpoint-phone-horizontal: 600px;
+    --breakpoint-tablet-vertical: 768px;
+    --breakpoint-tablet-horizontal: 1024px;
+    --breakpoint-desktop: 1440px;
+    
 }
 
 /*  */
@@ -34,7 +66,6 @@ body {
     flex-direction: column;
     justify-content: space-evenly;
     height: 100vh;
-}
 }
 
 body::-webkit-scrollbar {

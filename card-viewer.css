@@ -1,9 +1,15 @@
+html {
+    scroll-behavior: smooth;
+  }
+
 :host {
     display: block;
-    background: white;
-    padding: 1rem;
-    border-radius: 8px;
-    pointer-events: all !important;
+    background: white;        
+    pointer-events: all;
+
+    color: var(--primary-color, #000);
+    font-family: var(--font-family, Arial);
+    margin: var(--spacing, 0);
 }
 
 .overlay {
@@ -14,14 +20,288 @@
     height: 100vh;
     background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
     display: flex;
-    align-items: center;
+    align-items: start;
     justify-content: center;
     z-index: 1000; /* Ensure it appears on top */
-    backdrop-filter: blur(2px) !important; 
+    backdrop-filter: blur(2px) !important;    
+}
+
+.container {
+    width:90vw;
+    height:100%;
+    position:relative;
+    border: 1px solid #353B48;
+    background-color: #2B2A33;
+    display:flex;
+    flex-direction: column;
+}
+
+.card_flexbox {
+    width:100%;
+    flex-grow:3;
+    display: flex;
+    flex-direction: column;
+    position:relative;
+}
+
+.closeBtn {
+    position: absolute;
+    top: 10px;
+    right: 10px; 
+    border: none;
+    cursor: pointer;
+    z-index: 5;
+    opacity:0.9;
+    border-radius: 50%;    
+    height: 40px;
+    width:40px;
+    color: #fff;
+    font-weight: bold;
+    background-color: rgba(200, 200, 200, 0.7);
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+  }
+
+.controlBtn span {
+    cursor: pointer;
+    padding: 10px 5px;
+    color: #fff;
+    font-weight: bold;
+    background-color: rgba(200, 200, 200, 0.7);
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+}
+
+.controlBtn{
+    position: absolute;
+    width:1px;
+    top: 0; 
+    height: 50%;
+    font-size: 22px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+  }
+
+.leftBtn {
+    left: 20px;
+}
+
+.rightBtn {
+    right: 20px;
+  }
+
+.controlBar {
+    width:100%;
+    height:auto;
+
+    border: none;
+    z-index: 5;   
+    font-size: 22px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    border:#353B48 1px solid;
+}
+
+.dot_controlBar_container {
+    height:auto;
+    width:100%;     
+    border: none;
+    z-index: 5;   
+    font-size: 22px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border:#353B48 1px solid;
+}
+
+.imgContainer {
+    display: flex;
+    justify-content: center;
+    align-items:center;    
+    height:70%;
+    overflow: hidden;
+}
+
+.info {
+    flex: 1;
+    min-height:100px;
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    background-color: rgb(255, 255, 255);
    
 }
 
-.clear {
-    pointer-events: all !important;
+.closeBtn {
+    display: flex;
+    justify-content: center;
+    align-items:center;
+}
 
+.img_container_main {   
+    transition: transform 0.5s ease-in-out;
+    width:100%;
+    height:100%;
+}
+
+.img_container_main_div {
+    background-color: #6C6C6C;
+    cursor: pointer;
+    display: flex;
+    position:relative;
+}
+
+.img_container_main_div img {
+    width:100%;
+    height:100%;
+    object-fit:contain;
+}
+
+.selected {
+    border:1px solid green;
+}
+
+.tick {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #345635;
+    color: white;
+    border-radius: 50%;
+    font-size: 22px;
+    opacity: 0.9;
+    z-index: 100;
+    width:40px;
+    height:40px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+  }
+
+.tickThumbnail {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    background-color: #345635;
+    color: white;
+    border-radius: 50%;
+    font-size: 12px;
+    opacity: 0.9;
+    z-index: 100;
+    width:15px;
+    height:15px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.thumbnailControl_container {
+    width:100%;
+    overflow: hidden;   
+    height:auto;
+    background-color: #353B48
+}
+
+
+.thumbnailControl {   
+    padding:0px 0px 0px 3px;
+    gap: 2px;
+    max-width:100%;
+    width:auto;
+   
+    display: flex;
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory; /* Enables snapping to items */
+    scroll-snap-type: y mandatory; /* Enables snapping to items */
+    overflow-y: hidden;
+    flex-direction: row;
+    justify-content: start;
+    align-items:flex-start;
+    flex-wrap:nowrap;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+    transition: transform 0.5s ease-in-out;
+}
+
+.thumbnailControl::-webkit-scrollbar {
+    display: none;
+}
+
+.thumbnailControl_div {
+    flex-shrink: 0;
+    scroll-snap-align: center;
+    height:100%;
+    background-color: rgb(82, 144, 90);
+    border:none;
+    opacity:1;
+    filter: brightness(0.8);
+}
+
+.thumbnailControl_div.active {
+    filter: brightness(1.1);
+    outline: 3px green solid;
+}
+
+.thumbnailControl_div img {
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.dotsContainer_overlay {
+    width: 175px;  
+    overflow: hidden; 
+}
+
+.dotsContainer {
+    display:flex;   
+    justify-content: start;  
+    overflow-x:scroll;  
+    overflow-y:hidden;
+    transition: transform 0.5s ease-in-out;
+    scroll-snap-type: x mandatory; /* Enables snapping to items */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.dotsContainer::-webkit-scrollbar {
+    display: none;
+}
+
+.dot {
+    transition: all 0.5s ease-in-out;
+    flex-shrink: 0;
+    width: 10px;
+    height: 10px;
+    margin:10px;
+    font-size:9px;
+    background-color: white;
+    border-radius: 5px;
+    scroll-snap-align: center;
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+.dotActive {
+    -webkit-transform: scale(1.8);
+    -ms-transform: scale(1.8);
+    transform: scale(1.8);    
+}
+
+.dotSecondActive {
+    -webkit-transform: scale(1.4);
+    -ms-transform: scale(1.4);
+    transform: scale(1.4); 
+}
+
+.hidden {
+    display: none;
 }

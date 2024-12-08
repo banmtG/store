@@ -1,0 +1,28 @@
+:host {
+    display: block;
+    background: white;        
+    pointer-events: all;
+
+    color: var(--primary-color, #000);
+    font-family: var(--font-family, Arial);
+    margin: var(--spacing, 0);
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000; /* Ensure it appears on top */
+    backdrop-filter: blur(2px) !important;    
+}
+
+.clear {
+    pointer-events: all !important;
+
+}
