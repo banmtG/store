@@ -268,12 +268,12 @@ class PhotoViewer extends HTMLElement {
 
     // render Info
     this._info.innerHTML=`<span class="firstCol">Phân loại</span><span>${this._data.category}</span>
-    <span class="firstCol">Tên bánh</span><span>${this._data.name}</span>
-    <span class="firstCol">Mã bánh</span><span>${this._data.id}</span>
+    <span class="firstCol">Tên sản phẩm</span><span>${this._data.name}</span>
+    <span class="firstCol">Mã hiệu</span><span>${this._data.id}</span>
     <span class="firstCol">Đơn giá</span><span>${this.addDotToNumber(this._data.price)}</span>
     <span class="firstCol">Đơn vị tính</span><span>${this._data.unit}</span>
     <span class="firstCol">Thành phần chính</span><span>${this._data.description}</span>
-    <span class="firstCol">Số lượng bánh tối thiểu</span><span>${this._data.minOrder} ${this._data.unit}</span>
+    <span class="firstCol">Số lượng đặt tối thiểu</span><span>${this._data.minOrder} ${this._data.unit}</span>
     `; 
 
     // final procedures to show,etc., focus handling, storaing last focus element
