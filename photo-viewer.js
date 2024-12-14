@@ -60,7 +60,7 @@ class PhotoViewer extends HTMLElement {
             if (preferedCol%2===0) preferedCol++;
 
         if (this._screen==="tablet_vertical") {
-            if (preferedRow<2) preferedRow=2;
+           // if (preferedRow<2) preferedRow=2;
         }
 
         return {
@@ -135,8 +135,8 @@ class PhotoViewer extends HTMLElement {
            // console.log("Tablet vertical");
             this._container.style.cssText = "flex-direction: column";
             this._main_viewer.style.cssText = "flex:6; height:0";
-            this._extra_viewer.style.cssText = "flex:8; height:0";
-            this._controlBar.style.cssText = "flex:3; height:0";
+            this._extra_viewer.style.cssText = "flex:6; height:0";
+            this._controlBar.style.cssText = "flex:2; height:0";
             this._info.style.cssText = "flex:4; height:0";
                              
             if (height<=this._BREAKPOINTS.SHORT_SCREEN) {
@@ -156,10 +156,10 @@ class PhotoViewer extends HTMLElement {
             this._layout="horizontal";
            // console.log("Tablet horizontal");
             this._minTblength = 130;
-            this._container.style.cssText = "flex-direction: row";
+            this._container.style.cssText = "flex-direction: row; height:95%;";
             this._main_viewer.style.cssText = "flex:8; width:0";
-            this._extra_viewer.style.cssText = "flex:4; width:0";
-            this._controlBar.style.cssText = "flex:2; height:0";
+            this._extra_viewer.style.cssText = "flex:6; width:0";
+            this._controlBar.style.cssText = "flex:3; height:0";
             this._info.style.cssText = "flex:4; height:0";
           
         } else { 
@@ -169,11 +169,11 @@ class PhotoViewer extends HTMLElement {
           //  console.log("Desktop");
             this._layout="horizontal";
 
-            this._minTblength = 140;
-            this._container.style.cssText = "flex-direction: row";
+            this._minTblength = 130;
+            this._container.style.cssText = "flex-direction: row; height:95%;";
             this._main_viewer.style.cssText = "flex:8; width:0";
-            this._extra_viewer.style.cssText = "flex:5; width:0";
-            this._controlBar.style.cssText = "flex:2; height:0";
+            this._extra_viewer.style.cssText = "flex:6; width:0";
+            this._controlBar.style.cssText = "flex:3; height:0";
             this._info.style.cssText = "flex:4; height:0";
         } 
 
