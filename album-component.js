@@ -345,7 +345,7 @@ class PhotoAlbum extends HTMLElement {
         albumItem.querySelector('.info-button').addEventListener('click', (e) => {
           e.stopPropagation();  // Prevent parent click
           this._handleMoreInfo(item.id);
-          alert(`Info for ${item.name}:\n\nDescription: ${item.description}\nID: ${item.id}`);
+          //alert(`Info for ${item.name}:\n\nDescription: ${item.description}\nID: ${item.id}`);
         });
 
         
@@ -475,8 +475,19 @@ class PhotoAlbum extends HTMLElement {
     }
 
     _handleMoreInfo(itemId) {
-      const item = this._getItemObject(itemId);    
-      console.log(item);  
+      const item = this._getItemObject(itemId);     
+      const aDiv=document.createElement('div');
+      this.shadowRoot.appendChild(aDiv);
+      this.shadowRoot.querySelector('.container').insertAdjacentHTML("afterend","<photo-viewer></photo-viwer");
+      this._photoViewer = this.shadowRoot.querySelector('photo-viewer');
+      this._photoViewer.addEventListener("remove",(e)=> {
+        //console.log(e.detail.data);
+        this._photoViewer.remove();
+      });
+      //console.log(item); 
+      this._photoViewer.show(item);
+      //console.log(this._photoViewer);
+   
     }
     
 

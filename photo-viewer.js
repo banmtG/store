@@ -45,8 +45,8 @@ class PhotoViewer extends HTMLElement {
     }
 
     disconnectedCallback() {
-        this.resizeObserver.disconnect();
-        this.resizeObserverControlBar.disconnect();
+      //  this.resizeObserver.disconnect();
+      //  this.resizeObserverControlBar.disconnect();
     }
 
     _determineMinColRow(width,height) {   
@@ -58,10 +58,17 @@ class PhotoViewer extends HTMLElement {
             if (preferedRow%2===0) preferedRow++;
         if (this._layout==="vertical")
             if (preferedCol%2===0) preferedCol++;
+
+        if (this._screen==="tablet_vertical") {
+            if (preferedRow<2) preferedRow=2;
+        }
+
         return {
             minCol:preferedCol,
             minRow:preferedRow,
         }
+
+
     }
 
     _handleResizeControlBar(Rect) {
@@ -72,6 +79,13 @@ class PhotoViewer extends HTMLElement {
         this._tbNo = this._determineMinColRow(width,height).minCol;
         this._tbRow = this._determineMinColRow(width,height).minRow;
 
+       // console.log(this._tbNo);
+       // console.log(this._tbRow);
+        
+        this._reponsiveThumbnailControl();       
+    }
+
+    _reponsiveThumbnailControl() {
         if (this._layout==="vertical") {
             this._thumbnailControl_container.style.cssText = `row-gap:${this._thumbnailGap} ; column-gap:${this._thumbnailGap}; flex-direction: column; flex-wrap: wrap; overflow-x: scroll; overflow-y: hidden; scroll-snap-type: x mandatory; height:100%;`;
 
@@ -87,23 +101,25 @@ class PhotoViewer extends HTMLElement {
             item.style.cssText = `width:calc((100% / ${this._tbNo}) - ${this._thumbnailGap} + (${this._thumbnailGap} / ${this._tbNo})); height:calc((100% / ${this._tbRow}) - ${this._thumbnailGap} + (${this._thumbnailGap} / ${this._tbRow}));     scroll-snap-align: center;`;
         });
         }
-
-       
     }
 
     _handleResizeWholeComponent(Rect) {
         const width=Rect.width;
         const height=Rect.height;
+   
 
         if (width < this._BREAKPOINTS.PHONE_VERTICAL) {   // Mobile   
 
             if (height>this._BREAKPOINTS.SHORT_SCREEN) {
                 this._minTblength = 80;  
                 this._layout="vertical";
-                console.log("mobile");
+                this._screen="mobile";
+               // console.log("mobile");
                 this._container.style.cssText = "flex-direction: column";
-                this._main_viewer.style.cssText = "flex:6; height:0";
-                this._extra_viewer.style.cssText = "flex:1; height:0";
+                this._main_viewer.style.cssText = "flex:7; height:0";
+                this._extra_viewer.style.cssText = "flex:5; height:0";
+                this._controlBar.style.cssText = "flex:2; height:0";
+                this._info.style.cssText = "flex:4; height:0";
                 // this._thumbnailControl_container.style.cssText = `row-gap:${this._thumbnailGap} ; column-gap:${this._thumbnailGap}; overflow-x:scroll; overflow-y:hidden; scroll-snap-type: x mandatory; `;
 
                 // this._thumbnailControl_div.forEach(item=>{
@@ -114,14 +130,18 @@ class PhotoViewer extends HTMLElement {
         } else if (width < this._BREAKPOINTS.TABLET_VERTICAL) {
             // Tablet vertical
             this._layout="vertical";
+            this._screen="tablet_vertical";
             this._minTblength = 130;
-            console.log("Tablet vertical");
+           // console.log("Tablet vertical");
             this._container.style.cssText = "flex-direction: column";
-            this._main_viewer.style.cssText = "flex:9; height:0";
-            this._extra_viewer.style.cssText = "flex:5; height:0";
+            this._main_viewer.style.cssText = "flex:8; height:0";
+            this._extra_viewer.style.cssText = "flex:6; height:0";
+            this._controlBar.style.cssText = "flex:4; height:0";
+            this._info.style.cssText = "flex:2; height:0";
                              
             if (height<=this._BREAKPOINTS.SHORT_SCREEN) {
-                console.log("mobile landscape");
+                this._screen="mobile_landscape";
+               // console.log("mobile landscape");
                 this._layout="horizontal";
                 this._minTblength = 80;
                 this._container.style.cssText = "flex-direction: row";
@@ -132,8 +152,9 @@ class PhotoViewer extends HTMLElement {
             
         } else if (width < this._BREAKPOINTS.TABLET_HORIZONTAL ) {          
             // Tablet horizontal
+            this._screen="tablet_horizontal";
             this._layout="horizontal";
-            console.log("Tablet horizontal");
+           // console.log("Tablet horizontal");
             this._minTblength = 130;
             this._container.style.cssText = "flex-direction: row";
             this._main_viewer.style.cssText = "flex:8; width:0";
@@ -143,7 +164,8 @@ class PhotoViewer extends HTMLElement {
         } else { 
            // console.log(this._imgContainer.clientWidth);     
             // Desktop
-            console.log("Desktop");
+            this._screen="desktop";
+          //  console.log("Desktop");
             this._layout="horizontal";
 
             this._minTblength = 140;
@@ -152,15 +174,34 @@ class PhotoViewer extends HTMLElement {
             this._extra_viewer.style.cssText = "flex:5; width:0";
         } 
 
+
+        console.log(`width`,width);
+        console.log(`height`,height);
+
+        console.log(width/height);
+        console.log(height/width);
+        if (width/height>1.23) {
+            console.log(width/height);
+            this._layout="horizontal"; 
+            console.log(`horizontal`);
+        }
+        if (height/width>1.23) {
+            console.log(height/width);
+            this._layout="vertical";
+            console.log(`vertical`);
+        }
+
     }
 
     render() {    
         this.shadowRoot.innerHTML = `${this.componentCSS}
+        <div class="overlay">
             <div class="container">
                 <div class="main_viewer noUserSelect">    
                     <div class="imgContainer noScrollBar"></div>  
                     <div class="leftBtn controlBtn"><span><</span></div> 
                     <div class="rightBtn controlBtn"><span>></span></div>    
+                    <div class="optionBtn"><div></div><div></div><div></div><div></div></div>    
                     <div class="dotControl_container"></div>    
                 </div>    
                 <div class="extra_viewer noUserSelect">     
@@ -169,13 +210,16 @@ class PhotoViewer extends HTMLElement {
                     </div>   
                     <div class="info noScrollBar"></div> 
                 </div>      
-                <div class="closeBtn">X</div>
-            </div>`;
+                <div class="closeBtn"></div>
+            </div> 
+        </div>`;
+        this._overlay = this.shadowRoot.querySelector('.overlay'); 
         this._container = this.shadowRoot.querySelector('.container'); 
             this._main_viewer = this.shadowRoot.querySelector('.main_viewer');            
                 this._imgContainer = this.shadowRoot.querySelector('.imgContainer');   
                 this._leftBtn = this.shadowRoot.querySelector('.leftBtn');
                 this._rightBtn = this.shadowRoot.querySelector('.rightBtn');
+                this._optionBtn = this.shadowRoot.querySelector('.optionBtn');
                 this._dotControl_container = this.shadowRoot.querySelector('.dotControl_container'); 
             this._extra_viewer = this.shadowRoot.querySelector('.extra_viewer');
                 this._controlBar = this.shadowRoot.querySelector('.controlBar');        
@@ -194,49 +238,43 @@ class PhotoViewer extends HTMLElement {
       this._disableAllInputInsteadOfTheFocus();
     }
   
-show(data,lastFocusedElement=null) {
+    show(data,lastFocusedElement=null) {
     // pass data and render element
     this._data={...data};
 
     this._pos = 0;
 
-    this._effect = "fadeIn"; //slide fadeIn zoomin slideFade rotateYaxis slideBlur curtainReveal
+    this._effect = "Slide"; //slide fadeIn zoomin slideFade rotateYaxis slideBlur curtainReveal
+    this._imgFitstyle = "cover";  
 
-    // render Main Photos container
+       // render Main Photos container
     this._renderCarouselFromArray();
 
     // render Dot Control 
     this._dotNo = 5;
     this._renderDotsControl();
 
-
-
-    // render Thumbnail Control 
-    // this._tbNo = 5; // column Number
-    // this._tbRow = 5; // row Number
     this._thumbnailGap = "1px";
 
-    //console.log( document.body.clientWidth);
-    //this._layout = "vertical"; 
-    // if (document.body.clientWidth>=768) {
-    //     this._tbNo = 4; // column Number
-    //     this._layout = "horizontal"; // vertical horizontal
-    // }
-    // this._layout = "horizontal"; // vertical horizontal
 
-
-
+    console.log(this._tbNo);
+    console.log(this._tbRow);
     this._renderThumbnailControl();
-   // this._setCssforLayout();
-
 
     // Initial Jump to Pre-selected position
     setTimeout(()=>{
         this._albumShowPos(this._pos);
-    },10);
+    },0);
 
     // render Info
-    this._info.innerHTML=JSON.stringify(this._data);
+    this._info.innerHTML=`<span class="firstCol">Phân loại</span><span>${this._data.category}</span>
+    <span class="firstCol">Tên bánh</span><span>${this._data.name}</span>
+    <span class="firstCol">Mã bánh</span><span>${this._data.id}</span>
+    <span class="firstCol">Đơn giá</span><span>${this.addDotToNumber(this._data.price)}</span>
+    <span class="firstCol">Đơn vị tính</span><span>${this._data.unit}</span>
+    <span class="firstCol">Thành phần chính</span><span>${this._data.description}</span>
+    <span class="firstCol">Số lượng bánh tối thiểu</span><span>${this._data.minOrder} ${this._data.unit}</span>
+    `; 
 
     // final procedures to show,etc., focus handling, storaing last focus element
     // document.body.classList.add("dimmed"); // disable other components/elements of app
@@ -248,17 +286,18 @@ show(data,lastFocusedElement=null) {
 }
 
 _handleItemSelect(location) {
+    return; // disable selection;
     // handle update property      
     const result = this._selectedItems.find(item=>item===location);
     console.log(result);
     if (result!=undefined) {
-       // console.log('vao found');
+        console.log('vao found');
         this._selectedItems = this._selectedItems.filter(item=>item!==location); 
         this._imgContainer_div[location].querySelector('.tick').classList.add('hidden');
         this._thumbnailControl_div[location].querySelector('.tickThumbnail').classList.add('hidden');
        // console.log(this._img_container_main_div[location].querySelector('.tick'));
     } else {
-       // console.log('vao cannot be found');
+        console.log('vao cannot be found');
         this._selectedItems.push(location);       
         this._imgContainer_div[location].querySelector('.tick').classList.remove('hidden'); 
         this._thumbnailControl_div[location].querySelector('.tickThumbnail').classList.remove('hidden'); 
@@ -268,11 +307,16 @@ _handleItemSelect(location) {
 }
 
     _renderCarouselFromArray() {
+
         this._imgContainer.innerHTML="";  
         
         let imgArrayHtml ="";
-        this._data.url.forEach((img,index)=>{
-            imgArrayHtml = imgArrayHtml + `<div class="imgContainer_div"><div class="tick hidden">✔</div><img loading="lazy" src="${img}" alt="${index}"/></div>`;
+        this._data.url.forEach((img,index)=>{   
+            let tickString = "hidden";
+            if (this._selectedItems.find(item=>item===index)!=undefined) {
+                tickString="";     
+            }
+            imgArrayHtml = imgArrayHtml + `<div class="imgContainer_div"><div class="tick ${tickString}">✔</div><img loading="lazy" style="object-fit:${this._imgFitstyle}" src="${img}" alt="${index}"/></div>`;
         });
 
         this._imgContainer.innerHTML=imgArrayHtml;   
@@ -284,18 +328,20 @@ _handleItemSelect(location) {
                 e.stopPropagation();
                 this._handleItemSelect(this._pos);
             })
-            if (index>0) item.style.display = "none";
-        })        
 
-        
-        if (this._effect === "slide") {
+            // Hide from beginning until finish loading
+           // if (index>0) item.style.display = "none";
+        })        
+   
+        if (this._effect === "Slide") {
             this._imgContainer.classList.add('effect_slide_container');
             this._imgContainer_div.forEach(element=>{
                 element.classList.add('effect_slide_item');
             }) 
         }
 
-        if (this._effect === "fadeIn") {
+        if (this._effect === "FadeIn") {
+            this._imgContainer.style.cssText = "transform: translateX(0%);";
             this._imgContainer.classList.add('effect_fadeIn_container');
             this._imgContainer_div.forEach(element=>{
                 element.classList.add('effect_fadeIn_item');
@@ -303,7 +349,8 @@ _handleItemSelect(location) {
             }) 
         }
 
-        if (this._effect === "zoomin") {
+        if (this._effect === "ZoomIn") {
+            this._imgContainer.style.cssText = "transform: translateX(0%);";
             this._imgContainer.classList.add('effect_zoomin_container');
             this._imgContainer_div.forEach(element=>{
                 element.classList.add('effect_zoomin_item');
@@ -311,28 +358,31 @@ _handleItemSelect(location) {
             }) 
         }
 
-        if (this._effect === "slideFade") {
+        if (this._effect === "SlideFade") {
             this._imgContainer.classList.add('effect_slideFade_container');
             this._imgContainer_div.forEach(element=>{
                 element.classList.add('effect_slideFade_item');
             }) 
         }
 
-        if (this._effect === "rotateYaxis") {
+        if (this._effect === "RotateY") {
+            this._imgContainer.style.cssText = "transform: translateX(0%);";
+
             this._imgContainer.classList.add('effect_rotateYaxis_container');
             this._imgContainer_div.forEach(element=>{
                 element.classList.add('effect_rotateYaxis_item');
             }) 
         }
 
-        if (this._effect === "slideBlur") {
+        if (this._effect === "SlideBlur") {
             this._imgContainer.classList.add('effect_slideBlur_container');
             this._imgContainer_div.forEach(element=>{
                 element.classList.add('effect_slideBlur_item');              
             }) 
         }
 
-        if (this._effect === "curtainReveal") {
+        if (this._effect === "Curtain") {
+            this._imgContainer.style.cssText = "transform: translateX(0%);";
             this._imgContainer.classList.add('effect_curtainReveal_container');
             this._imgContainer_div.forEach(element=>{
                 element.classList.add('effect_curtainReveal_item');             
@@ -341,11 +391,11 @@ _handleItemSelect(location) {
 
 
         // hide carousel until all effects are done 
-        setTimeout(()=>{
-            this._imgContainer_div.forEach((item,index)=>{               
-                if (index>0) item.style.display = "block";
-            })      
-        },500);
+        // setTimeout(()=>{
+        //     this._imgContainer_div.forEach((item,index)=>{               
+        //         if (index>0) item.style.display = "block";
+        //     })      
+        // },500);
         
         
     }
@@ -383,7 +433,7 @@ _handleItemSelect(location) {
         let activeClass = "";       
         this._data.url.forEach((img,index)=>{
             if (index===this._pos) {activeClass="active";} else {activeClass = "";}
-            imgArrayHtml = imgArrayHtml + `<div class="thumbnailControl_div ${activeClass}"><div class="highlight">―</div><div class="tickThumbnail hidden">✔</div><img loading="lazy" style="max-height:512px; max-width:512px;" alt="${index}" src="${img}"/></div>`;            
+            imgArrayHtml = imgArrayHtml + `<div class="thumbnailControl_div ${activeClass}"><div class="highlight"><div></div></div><div class="tickThumbnail hidden">✔</div><img loading="lazy" style="max-height:512px; max-width:512px;" alt="${index}" src="${img}"/></div>`;            
         });
         this._thumbnailControl_container.innerHTML=imgArrayHtml;      
 
@@ -412,27 +462,27 @@ _handleItemSelect(location) {
     }
 
     _albumShowPos(pos) {   
-
-        if (this._effect==="slide") { // slide 
+  
+        if (this._effect==="Slide") { // slide fadeIn zoomin slideFade  Rotate (Y-Axis) slideBlur curtainReveal
             const offset = -100*pos;
             this._imgContainer.style.transform = `translateX(${offset}%)`;            
         } 
 
-        if (this._effect==="fadeIn") {  // fadeIn 
+        if (this._effect==="FadeIn") {  // fadeIn 
             this._imgContainer_div.forEach(element=>{
                 element.classList.remove('active');
             });     
             this._imgContainer_div[pos].classList.add('active');
         }
 
-        if (this._effect==="zoomin") {   // 3. zoomin 
+        if (this._effect==="ZoomIn") {   // 3. zoomin 
             this._imgContainer_div.forEach(element=>{
                 element.classList.remove('active');
             });
             this._imgContainer_div[pos].classList.add('active');
         }
 
-        if (this._effect==="slideFade") {   // 4. slideFade 
+        if (this._effect==="SlideFade") {   // 4. slideFade 
             const offset = -100*pos;
             this._imgContainer.style.transform = `translateX(${offset}%)`;  
             this._imgContainer_div.forEach(element=>{
@@ -441,14 +491,14 @@ _handleItemSelect(location) {
             this._imgContainer_div[pos].classList.add('active');
         }
 
-        if (this._effect==="rotateYaxis") {   // 5. Rotate (Y-Axis)
+        if (this._effect==="RotateY") {   // 5. Rotate (Y-Axis)
             this._imgContainer_div.forEach(element=>{
                 element.classList.remove('active');
             });
             this._imgContainer_div[pos].classList.add('active');
         }
 
-        if (this._effect==="slideBlur") {   // 6. slideBlur
+        if (this._effect==="SlideBlur") {   // 6. slideBlur
             const offset = -33.333333*pos;
             this._imgContainer.style.transform = `translateX(${offset}%)`;  
             this._imgContainer_div.forEach(element=>{
@@ -457,7 +507,7 @@ _handleItemSelect(location) {
             this._imgContainer_div[pos].classList.add('active');
         }
 
-        if (this._effect==="curtainReveal") {   // 7. curtainReveal
+        if (this._effect==="Curtain") {   // 7. curtainReveal
             this._imgContainer_div.forEach(element=>{
                 element.classList.remove('active');
             });
@@ -801,7 +851,7 @@ _handleItemSelect(location) {
     _onSwipeEnd(event) {
          console.log(`_onSwipeEnd`);
      const end = event.changedTouches[0].clientX;
-     this._info.innerHTML=this._swipeStart - end;
+    // this._info.innerHTML=this._swipeStart - end;
      if (this._swipeStart===end) this._handleItemSelect(this._pos);
      if (this._swipeStart - end > 50) this._next();
          if (this._swipeStart - end > 170) this._next();
@@ -836,9 +886,109 @@ _handleItemSelect(location) {
         }
     }
 
+    _renderOptionDialog() {
+        const aDiv=document.createElement('div');
+        aDiv.innerHTML=`<option-dialog></option-dialog>`;
+        this.shadowRoot.appendChild(aDiv);
+        this._dialog = this.shadowRoot.querySelector('option-dialog');
+        const dialog_header = `<h2>Photo Viewer Options</h2>`;
+        //Slide FadeIn Zoomin SlideFade  Rotate (Y-Axis) SlideBlur CurtainReveal
+        const dialog_body = `
+   <div class="scrollableY noScrollBar noUserSelect" data-theme="dark">
+                 <legend>Transition effect:</legend>
+    <div class="two_columns input_button">
+        <label><input type="radio" value="Slide" name="effect" />
+            Slide</label>
+        <label><input type="radio" value="FadeIn" name="effect" />
+            FadeIn</label>
+        <label><input type="radio" value="ZoomIn" name="effect" />
+            ZoomIn</label>
+        <label><input type="radio" value="SlideFade" name="effect" />
+            SlideFade</label>
+        <label><input type="radio" value="SlideBlur" name="effect" />
+            SlideBlur</label>
+        <label><input type="radio" value="Curtain" name="effect" />
+            Curtain</label>
+    </div>
+
+    <legend>Photo fitting style:</legend>
+    <div class="two_columns input_button">
+        <label><input type="radio" value="contain" name="fitstyle" />
+            Contain</label>
+        <label><input type="radio" value="cover" name="fitstyle" />
+            Cover</label>       
+    </div>
+
+    <legend>Thumnail control</legend>
+
+    <div class="sl-theme-dark">
+        <sl-range name="row" data-custom-component style="
+  --track-color-active: var(--sl-color-primary-600);
+  --track-color-inactive: var(--sl-color-primary-100);
+" label="Row" min="1" max="10" step="1"></></sl-range>
+ <legend></legend>    
+<sl-range name="col" data-custom-component style="
+  --track-color-active: var(--sl-color-primary-600);
+  --track-color-inactive: var(--sl-color-primary-100);
+" label="Column" min="1" max="10" step="1"></></sl-range>
+    </div></div>
+`;
+        console.log(this._imgFitstyle);
+        const initialObj = {
+            effect: this._effect,
+            fitstyle: this._imgFitstyle,
+            row:this._tbRow,
+            col:this._tbNo
+        }
+        this._dialog.open(dialog_header,dialog_body);
+        this._dialog.setValues(initialObj);
+        this._dialog.addEventListener("confirm", this._handleViewerOptionChange.bind(this));
+        this._dialog.addEventListener("cancel", ()=>{
+            this._dialog.parentElement.remove();
+        });
+    }
+
+    _handleViewerOptionChange(e) {    
+        const data=e.detail;
+       // console.log(data.effect);
+       // console.log(data.fitstyle);
+        this._effect = data.effect;
+        this._imgFitstyle = data.fitstyle;
+        this._tbRow=data.row;
+        this._tbNo=data.col;
+        this._renderCarouselFromArray();
+        this._reponsiveThumbnailControl();
+      
+        // this._tempSelectedItems = [...this._selectedItems];
+        // this._selectedItems = [];
+        console.log(this._selectedItems);
+        // console.log(this._tempSelectedItems);
+        // this._tempSelectedItems.forEach(item=>this._handleItemSelect(item));
+        // this._imgContainer_div.forEach(item=>{
+        //    // console.log(item.children[1]);
+        //     item.children[1].style.cssText = `object-fit:${this._imgFitstyle};`
+        // });     
+
+        setTimeout(()=>{
+            this._albumShowPos(this._pos);
+        },0);     
+        this._dialog.parentElement.remove();
+    }
+
+    _handleOverlayClick(e) {
+        console.log(e.target);
+        e.stopPropagation();
+        if (e.target===this._overlay) {
+            console.log(e.target);
+            this._handleEventCreation("remove","remove");
+        } 
+    }
+
     _bindEvents() {
+        this._overlay.addEventListener('click',this._handleOverlayClick.bind(this));
         this._leftBtn.addEventListener('click',this._prev.bind(this));        
         this._rightBtn.addEventListener('click',this._next.bind(this));   
+        this._optionBtn.addEventListener('click',this._renderOptionDialog.bind(this)); 
        // this._closeBtn.addEventListener('click', ()=> { this._hideOverlay(); });   
         
         // Swipe support
@@ -917,6 +1067,19 @@ _handleItemSelect(location) {
         this.dispatchEvent(event);     
     }
 
+
+    addDotToNumber(number) {
+        let str=number.toString();
+        let parts = [];
+        let digitN=str.length;
+        while (digitN>3) {           
+            parts.push(str.substring(digitN-3,digitN));
+            str = str.substring(0,digitN-3);
+            digitN=str.length;
+        }
+        if (digitN>0) parts.push(str);
+        return `đ ${parts.reverse().join('.')}`;
+      }
 }
   
   customElements.define("photo-viewer", PhotoViewer);

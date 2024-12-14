@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"> -->
+    <!-- <link href="./pico.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.17.1/cdn/themes/light.css" />
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.17.1/cdn/shoelace.js"></script>
+    <link href="./pico_root.css" rel="stylesheet">
+    <script type="text/javascript" src="./option-dialog.js"></script>
+    <script type="text/javascript" src="./custom-slider.js"></script>
+    <style>
+       
+.disabled {
+    pointer-events: none;
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+}
+
+.enabled {
+    pointer-events: all !important;;
+}
+    </style>
+</head>
+<body>
+   
+    <option-dialog></option-dialog>
+ 
+    <script>
+        
+        const dialog = document.querySelector("option-dialog");
+        const dialog_header = `<h4>Dialog Header</h4>`;
+        const dialog_body = `
+   <div class="scrollableY noScrollBar noUserSelect" data-theme="dark">
+              <legend>Language preference:</legend>
+            <div class="horizontal_menu scrollableX noScrollBar">
+  <label>
+    <input type="radio" value="English" name="language"/>
+    English
+  </label>
+  <label>
+    <input type="radio" value="French" name="language" />
+    French
+      </label>
+  <label>
+    <input type="radio" value="Mandarin" name="language" />
+    Mandarin
+  </label>
+  <label>
+    <input type="radio" value="Thai" name="language" />
+    Thai
+  </label>
+  <label aria-disabled="true">
+    <input type="radio" value="Dothraki" name="language" disabled />
+    Dothraki
+  </label>
+   
+
+  </div>
+                <legend>Language preference:</legend>
+            <div class="two_columns input_button">
+
+  <label>
+    <input type="checkbox" group="lan" name="english" />
+    English
+  </label>
+  <label>
+    <input type="checkbox" group="lan" name="french" />
+    French
+  </label>
+  <label>
+    <input type="checkbox" group="lan" name="mandarin" />
+    Mandarin
+  </label>
+  <label>
+    <input type="checkbox" group="lan" name="thai" />
+    Thai
+  </label>
+  <label aria-disabled="true">
+    <input type="checkbox" group="lan" name="dothraki" disabled />
+    Dothraki
+  </label>
+
+</div><sl-divider></sl-divider>
+<sl-switch name="sl-switch" data-custom-component checked>Checked</sl-switch>
+<sl-divider></sl-divider>
+<div  class="horizontal_menu scrollableX noScrollBar">
+<sl-radio-group name="a" data-custom-component value="1">
+  <sl-radio-button value="1">Option 1</sl-radio-button>
+  <sl-radio-button value="2">Option 2</sl-radio-button>
+  <sl-radio-button value="3">Option 3</sl-radio-button>
+    <sl-radio-button value="4">Option 4</sl-radio-button>
+  <sl-radio-button value="5">Option 5</sl-radio-button>
+  <sl-radio-button value="6">Option 6</sl-radio-button>
+</sl-radio-group>        
+</div>
+<sl-divider></sl-divider>
+<sl-input label="Nickname" name="sl-input-Nickname" data-custom-component help-text="What would you like people to call you?"></sl-input>
+<sl-divider></sl-divider>
+<sl-select name="sl-select" data-custom-component label="Select one">
+  <sl-option value="option-1">Option 1</sl-option>
+  <sl-option value="option-2">Option 2</sl-option>
+  <sl-option value="option-3">Option 3</sl-option>
+</sl-select>
+<sl-range label="Volume" data-custom-component name="body_sl-range" help-text="Controls the volume of the current song." min="0" max="100"></sl-range>
+</div>
+
+`;
+
+        dialog.addEventListener("confirm", (e) => {
+            console.log("Confirmed values:", e.detail);
+        });
+
+        document.body.addEventListener("confirm", (e) => {
+            console.log("Confirmed values:", e.detail);
+        });
+          
+
+        // const assignedElements = dialog.shadowRoot.querySelector('slot[name=body]').assignedElements({ flatten: true });
+        // assignedElements.forEach(element => {
+        //     console.log(element);
+        //     const formControls = element.querySelector("input[name='indeterminate']");
+        //     console.log(formControls);
+        //     formControls.indeterminate = true;
+        // });
+       //console.log(dialog.shadowRoot.querySelector('slot[name=body]'));
+       let obje={
+  "language": "French",
+  "english": false,
+  "french": true,
+  "mandarin": true,
+  "thai": true,
+  "dothraki": false,
+  "a": "3",
+  "sl-select": "option-3",
+  "body_sl-range": 41
+}
+      
+       dialog.open(dialog_header,dialog_body);
+ 
+      // this._scrollGuide(this._bodyEl,"vertical");
+       dialog.setValues(obje);
+     //  dialog.shadowRoot.querySelectorAll('input[name="Brightness"]
+         //console.log(dialog.shadowRoot.querySelectorAll('input[name="Brightness"]'));
+    </script>
+    
+    
+    
+    
+    
+    
+</body>
+</html>

@@ -4,127 +4,133 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Photo-viewer</title>
-    <link href="./css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.17.1/cdn/themes/light.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.17.1/cdn/themes/dark.css" />
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.17.1/cdn/shoelace.js"></script>
+    <link href="./css/base.css" rel="stylesheet" />
+    <link href="./css/pico_root.css" rel="stylesheet" />
     <script type="text/javascript" src="./photo-viewer.js"></script>
+    <link href="./option-dialog.css" rel="stylesheet" />
+    <script type="text/javascript" src="./option-dialog.js"></script>
+
     <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100vw;
+        height: 100vh;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        scroll-behavior: smooth;
+      }
 
-        html,body {
-            margin:0;
-            padding:0;
-            width:100vw;
-            height:100vh;
-            position:relative;
-            display:flex;
-            justify-content: center;
-            align-items:center;
-            scroll-behavior: smooth;
-        }
+      body::-webkit-scrollbar {
+        display: none;
+      }
 
-        body::-webkit-scrollbar {
-            display: none;            
-        }
-
-
-        photo-viewer[hidden] {
-            display: none; /* Hide when not active */
-        }
-
-
+      photo-viewer[hidden] {
+        display: none; /* Hide when not active */
+      }
     </style>
   </head>
 
   <body>
-
+   
     <photo-viewer></photo-viewer>
 
     <script>
-        // Main application logic
-        const pv=document.querySelector('photo-viewer');
+      // Main application logic
+      const pv = document.querySelector("photo-viewer");
 
-        const objectData = {
-                "category": "Món_mặn_chính",
-                "id": "B1001",
-                "name": "Bánh mì baguette salad nga ",
-                "price": 15000,
-                "unit": "cái",
-                "description": "Bột mì, bột ngọt",
-                "minOrder": 20,
-                "url": [
-"https://lh3.googleusercontent.com/d/15-C4hmeTKonvXHcNY8p2MaivbGblFYMD",
-"https://lh3.googleusercontent.com/d/1YeX4KPKrrC34cb1VHPVdBAMPQAqhcfa7",
-"https://lh3.googleusercontent.com/d/1isFGxuzKk2PVdFtLFO2dKUjd_dKSe2m9",
-"https://lh3.googleusercontent.com/d/1BWXcBBP1yJJK7iTlK9FyvkzHAePz7O4R",
-"https://lh3.googleusercontent.com/d/1szoxHk6BTxw2CuhLU7lr59aCPgflb6Zk",
-"https://lh3.googleusercontent.com/d/1yIxjjmO8p0SFDKwmZvw0qf89iLPBZnTO",
-"https://lh3.googleusercontent.com/d/1GJ6WX6867X2ROQcQ9wgLUmWHFVYiIhTw",
-"https://lh3.googleusercontent.com/d/1xsPOmEeB8m9CVmVFtC_Fo7KUXIeA5Tbu",
-"https://lh3.googleusercontent.com/d/1O7T0JZ_VLJKB28t0rVVDpK-sffGVFcbZ",
-"https://lh3.googleusercontent.com/d/17PrTnW7tF0mziqp-CCeb_LvfpTwe8iWr",
-"https://lh3.googleusercontent.com/d/15pZ8jakcx-Iml44myMVZOqFVENDhvsZ2",
-"https://lh3.googleusercontent.com/d/11i9yTVSM3fDmgqAoDoGx5eljInD5cgu_",
-"https://lh3.googleusercontent.com/d/10SLNK0MaJeKhdMSjL7dawaCKHjJdBSDE",
-"https://lh3.googleusercontent.com/d/1kxZozx2-_UIA4Wwj5ARq2UUJz9MfJb7n",
-"https://lh3.googleusercontent.com/d/1AX8lKZkd8z7KvbNqx9qhAAgWwSwDPF59",
-"https://lh3.googleusercontent.com/d/1wnvkzJSYtV_Vj6pfqDnfuNIHEF-p4xYz",
-"https://lh3.googleusercontent.com/d/1-xu4SBWoKOgFXx1bRZ0tCh1527l6ZzRm",
-"https://lh3.googleusercontent.com/d/1_CMRnQPI71aqhbgzF5nw6Ez2vsPvfTZt",
-"https://lh3.googleusercontent.com/d/1Kh6j4CdW-cXWptRAQymPRUDpEA08GGmV",
-"https://lh3.googleusercontent.com/d/1s_tmqLXtQG6TDvhuSFBSZZ9jje0suBJ4",
-"https://lh3.googleusercontent.com/d/1Ee4phbJh_KUWVMkKcWHVAUTKu19LWczY",
-"https://lh3.googleusercontent.com/d/1IRO_n_jJVc-rU7iCzSXz6pqNy-P6KqIE",
-"https://lh3.googleusercontent.com/d/1dyleI1UXeOGqJiqpgJbbYgNhF6r0wx6m",
-"https://lh3.googleusercontent.com/d/1Ojx2vz4IlLU0JBbcGsw1njVq4pQ_Jueq",
-"https://lh3.googleusercontent.com/d/1FpfGjB07nGyYYMyGO2YLj6LswRwNI1Y8",
-"https://lh3.googleusercontent.com/d/1jed3-BDRKnn_J_rWDuIHOBm4QyImqACN",
-"https://lh3.googleusercontent.com/d/1PLOLePg5LrcEsgheQyOaoNlTxO8nq7xM",
-"https://lh3.googleusercontent.com/d/1O3Pz1FmzSJ0PfOXOvPscgJmXt33fuXig",
-"https://lh3.googleusercontent.com/d/1VIIng3pzuwgVyu7u9nOLUYFGIupsivHn",
-"https://lh3.googleusercontent.com/d/1muTTvgyl0AUvURa5iWzCPpl-73BKyciM",
-"https://lh3.googleusercontent.com/d/1c8aJ2r0R_AVgQ0XJ21BBhT4eSnVow_P4",
-"https://lh3.googleusercontent.com/d/13tbbAMhFXpMAYssOvBWzgKforxrAwQS1",
-"https://lh3.googleusercontent.com/d/19w79c2_R6ar5xefc5qOEc2zvnrlDpB9A",
-"https://lh3.googleusercontent.com/d/1ifyHZ9OiXCPhoJqPPeJDoLLntKO7cXi-",
-"https://lh3.googleusercontent.com/d/1ULnBhQLaKJg2Dc_AjFhZ2d5WperETTfW",
-"https://lh3.googleusercontent.com/d/1dWtPFHKJ_d7B-mCMMHn1SObb_WhZIf8M",
-"https://lh3.googleusercontent.com/d/13EpUslNlBRhVtjC4XXX9mru298Iv7rlm",
-"https://lh3.googleusercontent.com/d/1qDVmuhBaB7XJArd3ZqCUmXKl_D58gSO9",
-"https://lh3.googleusercontent.com/d/1Lg3x2gnj18u1X70UkAdApL92szWURp2o",
-"https://lh3.googleusercontent.com/d/1olLmLamLaYugBk1-2Jpc0XI37ZczJ35F",
-"https://lh3.googleusercontent.com/d/1zfXXKaQ8HYhIimfQJ35tCBe-8wudeiUR",
-"https://lh3.googleusercontent.com/d/1nPKORwKpRkYBXeRrNdZXGf3Xt26NqwaP",
-"https://lh3.googleusercontent.com/d/15-wjwRjj7_VA2Q9samGD1P7jSjnDIyzH",
-"https://lh3.googleusercontent.com/d/1nsDKQ884eXZTalqTdFZDDAaPrLLesWbT",
-"https://lh3.googleusercontent.com/d/1M8enLW668b95bvTFgF5qYoeSHJRDdG8w",
-"https://lh3.googleusercontent.com/d/151G-PGNmM1BdXUo4hBNla0lxFXGCwlb_",
-"https://lh3.googleusercontent.com/d/12_VJo0AS41AdedfgZ0Kf31Rv8SmkTkLL",
-"https://lh3.googleusercontent.com/d/1nk1-gDcu9e7baCstyBouZQ2j9-ue6i79",
-"https://lh3.googleusercontent.com/d/1b3YxpBCuGZNQLGVUaiECveDWPQLPYOpt",
-"https://lh3.googleusercontent.com/d/1DnHEgDyG33poFFoqwsS9DBEMjS18-R0O",
-"https://lh3.googleusercontent.com/d/14N5xzQd4SSrztGHr7wj9t3Wm_Pf86_PM",
-"https://lh3.googleusercontent.com/d/1ya5Nw9lDrkEPBpAvbI0giKOjJYmfK3Zt",
-"https://lh3.googleusercontent.com/d/10a0bDwWzVVC1WDoE9i8Vp_RFGxr-mLHg",
-"https://lh3.googleusercontent.com/d/199LgFBjUHA9kzKdVGRPo88FW3HithPZR",
-"https://lh3.googleusercontent.com/d/1HeOAEz52ZylKwHu3R6iH56l4qpn7xmhs",
-"https://lh3.googleusercontent.com/d/1RNczkIvgPS95NVx9845rdmI5iTNbw8zT",
-"https://lh3.googleusercontent.com/d/1iOMfBhGKcFCDKYtqqsCSw_QlDVo3Vu3c",
-"https://lh3.googleusercontent.com/d/1sFH4oRwh66v8adgcFZYdN9GyNERveKdR",
-"https://lh3.googleusercontent.com/d/1DQ3tLIDIckbN2_GCMPJE3nnQ9XbBgSqf",
-"https://lh3.googleusercontent.com/d/1G3mPFX1xZ2ahc4Ee3Lct26VfT2rqWvWt",
-"https://lh3.googleusercontent.com/d/1hi46gaISki47akDvEFxuQQ70ZCELx0y6",
-"https://lh3.googleusercontent.com/d/1ptnti9W4mDjF2PiIj4ZCZ7nZdPk6JjJN",
-"https://lh3.googleusercontent.com/d/1q3dzSm_MM3-V6CtyEVpVhU-xvgIyWA6Q",
-"https://lh3.googleusercontent.com/d/1qrWBhpDPWAV3cKbuTn-7YS1Voa-z7p99",
-"https://lh3.googleusercontent.com/d/1tdtymM2KsXdOaRXMcJ-ocZEYe-vyh74m",
-"https://lh3.googleusercontent.com/d/1wyQBph5kOdgqlzaPVjr34EsQKhRn76Se",
-"https://lh3.googleusercontent.com/d/18XRPvB5O-F7r2nVFH2MjVFuc54ReVzJQ",
-"https://lh3.googleusercontent.com/d/1AKtPpCb-vLTsfQo9Y5AmqVt2dOV14Yh_",
-"https://lh3.googleusercontent.com/d/1aOBZSs_bIG_z34vXwgB1JHzbNQYVxQM6",                
-]
-        }
+      const objectData = {
+        category: "Món_mặn_chính",
+        id: "B1001",
+        name: "Bánh mì baguette salad nga ",
+        price: 15000,
+        unit: "cái",
+        description: "Bột mì, bột ngọt",
+        minOrder: 20,
+        url: [
+          "https://lh3.googleusercontent.com/d/15-C4hmeTKonvXHcNY8p2MaivbGblFYMD",
+          "https://lh3.googleusercontent.com/d/1YeX4KPKrrC34cb1VHPVdBAMPQAqhcfa7",
+          "https://lh3.googleusercontent.com/d/1isFGxuzKk2PVdFtLFO2dKUjd_dKSe2m9",
+          "https://lh3.googleusercontent.com/d/1BWXcBBP1yJJK7iTlK9FyvkzHAePz7O4R",
+          "https://lh3.googleusercontent.com/d/1szoxHk6BTxw2CuhLU7lr59aCPgflb6Zk",
+          "https://lh3.googleusercontent.com/d/1yIxjjmO8p0SFDKwmZvw0qf89iLPBZnTO",
+          "https://lh3.googleusercontent.com/d/1GJ6WX6867X2ROQcQ9wgLUmWHFVYiIhTw",
+          "https://lh3.googleusercontent.com/d/1xsPOmEeB8m9CVmVFtC_Fo7KUXIeA5Tbu",
+          "https://lh3.googleusercontent.com/d/1O7T0JZ_VLJKB28t0rVVDpK-sffGVFcbZ",
+          "https://lh3.googleusercontent.com/d/17PrTnW7tF0mziqp-CCeb_LvfpTwe8iWr",
+          "https://lh3.googleusercontent.com/d/15pZ8jakcx-Iml44myMVZOqFVENDhvsZ2",
+          "https://lh3.googleusercontent.com/d/11i9yTVSM3fDmgqAoDoGx5eljInD5cgu_",
+          "https://lh3.googleusercontent.com/d/10SLNK0MaJeKhdMSjL7dawaCKHjJdBSDE",
+          "https://lh3.googleusercontent.com/d/1kxZozx2-_UIA4Wwj5ARq2UUJz9MfJb7n",
+          "https://lh3.googleusercontent.com/d/1AX8lKZkd8z7KvbNqx9qhAAgWwSwDPF59",
+          "https://lh3.googleusercontent.com/d/1wnvkzJSYtV_Vj6pfqDnfuNIHEF-p4xYz",
+          "https://lh3.googleusercontent.com/d/1-xu4SBWoKOgFXx1bRZ0tCh1527l6ZzRm",
+          "https://lh3.googleusercontent.com/d/1_CMRnQPI71aqhbgzF5nw6Ez2vsPvfTZt",
+          "https://lh3.googleusercontent.com/d/1Kh6j4CdW-cXWptRAQymPRUDpEA08GGmV",
+          "https://lh3.googleusercontent.com/d/1s_tmqLXtQG6TDvhuSFBSZZ9jje0suBJ4",
+          "https://lh3.googleusercontent.com/d/1Ee4phbJh_KUWVMkKcWHVAUTKu19LWczY",
+          "https://lh3.googleusercontent.com/d/1IRO_n_jJVc-rU7iCzSXz6pqNy-P6KqIE",
+          "https://lh3.googleusercontent.com/d/1dyleI1UXeOGqJiqpgJbbYgNhF6r0wx6m",
+          "https://lh3.googleusercontent.com/d/1Ojx2vz4IlLU0JBbcGsw1njVq4pQ_Jueq",
+          "https://lh3.googleusercontent.com/d/1FpfGjB07nGyYYMyGO2YLj6LswRwNI1Y8",
+          "https://lh3.googleusercontent.com/d/1jed3-BDRKnn_J_rWDuIHOBm4QyImqACN",
+          "https://lh3.googleusercontent.com/d/1PLOLePg5LrcEsgheQyOaoNlTxO8nq7xM",
+          "https://lh3.googleusercontent.com/d/1O3Pz1FmzSJ0PfOXOvPscgJmXt33fuXig",
+          "https://lh3.googleusercontent.com/d/1VIIng3pzuwgVyu7u9nOLUYFGIupsivHn",
+          "https://lh3.googleusercontent.com/d/1muTTvgyl0AUvURa5iWzCPpl-73BKyciM",
+          "https://lh3.googleusercontent.com/d/1c8aJ2r0R_AVgQ0XJ21BBhT4eSnVow_P4",
+          "https://lh3.googleusercontent.com/d/13tbbAMhFXpMAYssOvBWzgKforxrAwQS1",
+          "https://lh3.googleusercontent.com/d/19w79c2_R6ar5xefc5qOEc2zvnrlDpB9A",
+          "https://lh3.googleusercontent.com/d/1ifyHZ9OiXCPhoJqPPeJDoLLntKO7cXi-",
+          "https://lh3.googleusercontent.com/d/1ULnBhQLaKJg2Dc_AjFhZ2d5WperETTfW",
+          "https://lh3.googleusercontent.com/d/1dWtPFHKJ_d7B-mCMMHn1SObb_WhZIf8M",
+          "https://lh3.googleusercontent.com/d/13EpUslNlBRhVtjC4XXX9mru298Iv7rlm",
+          "https://lh3.googleusercontent.com/d/1qDVmuhBaB7XJArd3ZqCUmXKl_D58gSO9",
+          "https://lh3.googleusercontent.com/d/1Lg3x2gnj18u1X70UkAdApL92szWURp2o",
+          "https://lh3.googleusercontent.com/d/1olLmLamLaYugBk1-2Jpc0XI37ZczJ35F",
+          "https://lh3.googleusercontent.com/d/1zfXXKaQ8HYhIimfQJ35tCBe-8wudeiUR",
+          "https://lh3.googleusercontent.com/d/1nPKORwKpRkYBXeRrNdZXGf3Xt26NqwaP",
+          "https://lh3.googleusercontent.com/d/15-wjwRjj7_VA2Q9samGD1P7jSjnDIyzH",
+          "https://lh3.googleusercontent.com/d/1nsDKQ884eXZTalqTdFZDDAaPrLLesWbT",
+          "https://lh3.googleusercontent.com/d/1M8enLW668b95bvTFgF5qYoeSHJRDdG8w",
+          "https://lh3.googleusercontent.com/d/151G-PGNmM1BdXUo4hBNla0lxFXGCwlb_",
+          "https://lh3.googleusercontent.com/d/12_VJo0AS41AdedfgZ0Kf31Rv8SmkTkLL",
+          "https://lh3.googleusercontent.com/d/1nk1-gDcu9e7baCstyBouZQ2j9-ue6i79",
+          "https://lh3.googleusercontent.com/d/1b3YxpBCuGZNQLGVUaiECveDWPQLPYOpt",
+          "https://lh3.googleusercontent.com/d/1DnHEgDyG33poFFoqwsS9DBEMjS18-R0O",
+          "https://lh3.googleusercontent.com/d/14N5xzQd4SSrztGHr7wj9t3Wm_Pf86_PM",
+          "https://lh3.googleusercontent.com/d/1ya5Nw9lDrkEPBpAvbI0giKOjJYmfK3Zt",
+          "https://lh3.googleusercontent.com/d/10a0bDwWzVVC1WDoE9i8Vp_RFGxr-mLHg",
+          "https://lh3.googleusercontent.com/d/199LgFBjUHA9kzKdVGRPo88FW3HithPZR",
+          "https://lh3.googleusercontent.com/d/1HeOAEz52ZylKwHu3R6iH56l4qpn7xmhs",
+          "https://lh3.googleusercontent.com/d/1RNczkIvgPS95NVx9845rdmI5iTNbw8zT",
+          "https://lh3.googleusercontent.com/d/1iOMfBhGKcFCDKYtqqsCSw_QlDVo3Vu3c",
+          "https://lh3.googleusercontent.com/d/1sFH4oRwh66v8adgcFZYdN9GyNERveKdR",
+          "https://lh3.googleusercontent.com/d/1DQ3tLIDIckbN2_GCMPJE3nnQ9XbBgSqf",
+          "https://lh3.googleusercontent.com/d/1G3mPFX1xZ2ahc4Ee3Lct26VfT2rqWvWt",
+          "https://lh3.googleusercontent.com/d/1hi46gaISki47akDvEFxuQQ70ZCELx0y6",
+          "https://lh3.googleusercontent.com/d/1ptnti9W4mDjF2PiIj4ZCZ7nZdPk6JjJN",
+          "https://lh3.googleusercontent.com/d/1q3dzSm_MM3-V6CtyEVpVhU-xvgIyWA6Q",
+          "https://lh3.googleusercontent.com/d/1qrWBhpDPWAV3cKbuTn-7YS1Voa-z7p99",
+          "https://lh3.googleusercontent.com/d/1tdtymM2KsXdOaRXMcJ-ocZEYe-vyh74m",
+          "https://lh3.googleusercontent.com/d/1wyQBph5kOdgqlzaPVjr34EsQKhRn76Se",
+          "https://lh3.googleusercontent.com/d/18XRPvB5O-F7r2nVFH2MjVFuc54ReVzJQ",
+          "https://lh3.googleusercontent.com/d/1AKtPpCb-vLTsfQo9Y5AmqVt2dOV14Yh_",
+          "https://lh3.googleusercontent.com/d/1aOBZSs_bIG_z34vXwgB1JHzbNQYVxQM6",
+        ],
+      };
 
-        pv.show(objectData);
-
+      pv.show(objectData);
+      pv.addEventListener("remove",(e)=> {
+        console.log(e.detail.data);
+        pv.remove();
+      });
     </script>
   </body>
-
 </html>
