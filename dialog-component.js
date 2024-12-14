@@ -37,6 +37,7 @@ class DialogComponent extends HTMLElement {
           font-size: 1.2rem;
           font-weight: bold;
           background: var(--theme-color);
+          color: white;
       }
 
       .center {
@@ -76,7 +77,7 @@ class DialogComponent extends HTMLElement {
         justify-content: center;
         align-items: center;
         background: var(--theme-color); 
-        color: rgba(0,0,75,0.7);
+        color: white;
         border: none;
         padding: 5px 10px;
         font-size:1.1rem;        

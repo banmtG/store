@@ -116,9 +116,9 @@ class PhotoViewer extends HTMLElement {
                 this._screen="mobile";
                // console.log("mobile");
                 this._container.style.cssText = "flex-direction: column";
-                this._main_viewer.style.cssText = "flex:7; height:0";
-                this._extra_viewer.style.cssText = "flex:5; height:0";
-                this._controlBar.style.cssText = "flex:2; height:0";
+                this._main_viewer.style.cssText = "flex:6; height:0";
+                this._extra_viewer.style.cssText = "flex:7; height:0";
+                this._controlBar.style.cssText = "flex:1; height:0";
                 this._info.style.cssText = "flex:4; height:0";
                 // this._thumbnailControl_container.style.cssText = `row-gap:${this._thumbnailGap} ; column-gap:${this._thumbnailGap}; overflow-x:scroll; overflow-y:hidden; scroll-snap-type: x mandatory; `;
 
@@ -134,10 +134,10 @@ class PhotoViewer extends HTMLElement {
             this._minTblength = 130;
            // console.log("Tablet vertical");
             this._container.style.cssText = "flex-direction: column";
-            this._main_viewer.style.cssText = "flex:8; height:0";
-            this._extra_viewer.style.cssText = "flex:6; height:0";
-            this._controlBar.style.cssText = "flex:4; height:0";
-            this._info.style.cssText = "flex:2; height:0";
+            this._main_viewer.style.cssText = "flex:6; height:0";
+            this._extra_viewer.style.cssText = "flex:8; height:0";
+            this._controlBar.style.cssText = "flex:3; height:0";
+            this._info.style.cssText = "flex:4; height:0";
                              
             if (height<=this._BREAKPOINTS.SHORT_SCREEN) {
                 this._screen="mobile_landscape";
@@ -159,7 +159,8 @@ class PhotoViewer extends HTMLElement {
             this._container.style.cssText = "flex-direction: row";
             this._main_viewer.style.cssText = "flex:8; width:0";
             this._extra_viewer.style.cssText = "flex:4; width:0";
-           
+            this._controlBar.style.cssText = "flex:2; height:0";
+            this._info.style.cssText = "flex:4; height:0";
           
         } else { 
            // console.log(this._imgContainer.clientWidth);     
@@ -172,6 +173,8 @@ class PhotoViewer extends HTMLElement {
             this._container.style.cssText = "flex-direction: row";
             this._main_viewer.style.cssText = "flex:8; width:0";
             this._extra_viewer.style.cssText = "flex:5; width:0";
+            this._controlBar.style.cssText = "flex:2; height:0";
+            this._info.style.cssText = "flex:4; height:0";
         } 
 
 
