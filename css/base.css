@@ -43,6 +43,9 @@
     --breakpoint-tablet-vertical: 768px;
     --breakpoint-tablet-horizontal: 1024px;
     --breakpoint-desktop: 1440px;
+
+    --viewport-height: 100vh; /* Fallback for browsers without JS */
+
     
 }
 

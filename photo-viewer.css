@@ -21,11 +21,11 @@
 }
 
 .container {
-    position:absolute;
-    top: 20px;
+    /* position:absolute;
+    top: 40px; */
     border-radius: 10px;
     width:90%;
-    height:80%;    
+    height:85%;    
     overflow: hidden;
     display:flex;
     flex-direction: column;
